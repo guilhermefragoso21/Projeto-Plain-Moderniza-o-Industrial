@@ -1,5 +1,5 @@
 var LOGO_SRC = "imagens/Logo PLAIN.png";    
-var BG_SRC   = "imagens/fe.png";
+var BG_SRC   = "";
 
 function initImages() {
   var logo = document.getElementById("logo-img");
