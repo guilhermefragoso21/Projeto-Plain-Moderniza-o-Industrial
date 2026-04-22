@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PLAIN – Modernização Industrial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar__brand">
+      <img id="logo-img" src="" alt="PLAIN Logo" class="navbar__logo" />
+      <div class="navbar__brand-text">
+        <span class="navbar__name">PLAIN</span>
+        <span class="navbar__subtitle">Modernização Industrial</span>
+      </div>
+    </div>
+    <nav class="navbar__nav">
+      <a href="#" class="nav-link active">Início</a>
+      <a href="#" class="nav-link">Quem somos</a>
+      <a href="#" class="nav-link">Contato</a>
+    </nav>
+    <div class="navbar__lang">
+      <img src="https://flagcdn.com/w40/br.png" alt="Português" class="lang-flag" />
+      <span class="lang-label">PT</span>
+      <svg class="lang-chevron" viewBox="0 0 10 6" fill="none">
+        <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="hero__bg-wrapper">
+      <img id="bg-img" src="" alt="Background" class="hero__bg" />
+      <div class="hero__overlay"></div>
+    </div>
+
+    <div class="hero__content">
+      <div class="hero__text">
+        <h1 class="hero__title">Título</h1>
+        <p class="hero__subtitle">Subtítulo</p>
+      </div>
+
+      <div class="hero__card">
+        <h2 class="card__heading">Entre em contato</h2>
+
+        <div class="card__tabs">
+          <button class="tab active" id="tab-empresa" onclick="switchTab('empresa')">Empresa</button>
+          <button class="tab" id="tab-pessoal" onclick="switchTab('pessoal')">Pessoal</button>
+        </div>
+
+        <p class="card__section-label">Dados</p>
+
+        <div class="card__form" id="form-empresa">
+          <div class="form-grid">
+            <input type="text" class="form-input" placeholder="Razão Social" />
+            <input type="text" class="form-input" placeholder="CNPJ" />
+            <input type="email" class="form-input" placeholder="E-mail" />
+            <input type="tel" class="form-input" placeholder="Telefone" />
+            <input type="text" class="form-input" placeholder="Setor" />
+            <input type="text" class="form-input" placeholder="Cargo" />
+          </div>
+          <button class="form-submit" onclick="handleSubmit()">Enviar mensagem</button>
+        </div>
+
+        <div class="card__form hidden" id="form-pessoal">
+          <div class="form-grid">
+            <input type="text" class="form-input" placeholder="Nome" />
+            <input type="text" class="form-input" placeholder="Sobrenome" />
+            <input type="email" class="form-input" placeholder="E-mail" />
+            <input type="tel" class="form-input" placeholder="Telefone" />
+            <input type="text" class="form-input" placeholder="Cidade" />
+            <input type="text" class="form-input" placeholder="Estado" />
+          </div>
+          <button class="form-submit" onclick="handleSubmit()">Enviar mensagem</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
