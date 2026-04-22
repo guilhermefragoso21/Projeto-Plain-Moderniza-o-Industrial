@@ -48,4 +48,5 @@ function handleSubmit() {
   if (filled) {
     alert("Mensagem enviada com sucesso!");
     inputs.forEach(function(input) { input.value = ""; });
-  }
+   }
+}
