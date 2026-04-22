@@ -31,7 +31,7 @@
   --radius-lg:       12px;
   --transition:      0.2s ease;
   --font:            'Segoe UI', system-ui, -apple-system, sans-serif;
-  --hero-bg-image:   url('imagens/fundo site.png');
+  --hero-bg-image:   url('imagens/fundosite.png');
   --hero-bg-opacity: 0.18;
 }
 html, body {
