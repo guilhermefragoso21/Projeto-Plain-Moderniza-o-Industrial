@@ -1,9 +1,3 @@
-/* =============================================
-   PLAIN — Login Page Styles
-   style.css
-   ============================================= */
-
-/* ---- Reset & Base ---- */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -11,29 +5,30 @@
 }
 
 :root {
-  --blue-primary:    #4a9eff;
-  --blue-light:      #6ab0ff;
-  --blue-dim:        rgba(74, 158, 255, 0.15);
-  --blue-border:     rgba(74, 158, 255, 0.25);
-  --bg-dark:         #071628;
-  --bg-card:         rgba(8, 32, 64, 0.88);
-  --text-white:      #ffffff;
-  --text-muted:      rgba(255, 255, 255, 0.55);
-  --text-hint:       rgba(255, 255, 255, 0.3);
-  --input-bg:        rgba(255, 255, 255, 0.07);
-  --input-border:    rgba(74, 158, 255, 0.22);
+  --blue-primary:       #4a9eff;
+  --blue-light:         #6ab0ff;
+  --blue-dim:           rgba(74, 158, 255, 0.15);
+  --blue-border:        rgba(74, 158, 255, 0.25);
+  --bg-dark:            #071628;
+  --bg-card:            rgba(8, 32, 64, 0.88);
+  --text-white:         #ffffff;
+  --text-muted:         rgba(255, 255, 255, 0.55);
+  --text-hint:          rgba(255, 255, 255, 0.3);
+  --input-bg:           rgba(255, 255, 255, 0.07);
+  --input-border:       rgba(74, 158, 255, 0.22);
   --input-border-focus: #4a9eff;
-  --error-color:     #ff6b6b;
-  --nav-height:      58px;
-  --card-width:      370px;
-  --radius-sm:       6px;
-  --radius-md:       8px;
-  --radius-lg:       12px;
-  --transition:      0.2s ease;
-  --font:            'Segoe UI', system-ui, -apple-system, sans-serif;
-  --hero-bg-image:   url('imagens/fundosite.png');
-  --hero-bg-opacity: 0.18;
+  --error-color:        #ff6b6b;
+  --nav-height:         58px;
+  --card-width:         370px;
+  --radius-sm:          6px;
+  --radius-md:          8px;
+  --radius-lg:          12px;
+  --transition:         0.2s ease;
+  --font:               'Segoe UI', system-ui, -apple-system, sans-serif;
+  --hero-bg-image:      url('fundo_site.png');
+  --hero-bg-opacity:    0.55;
 }
+
 html, body {
   height: 100%;
   font-family: var(--font);
@@ -50,7 +45,6 @@ ul {
   list-style: none;
 }
 
-/* ---- Navbar ---- */
 .navbar {
   position: fixed;
   top: 0;
@@ -78,13 +72,14 @@ ul {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(74, 158, 255, 0.1);
+  background: #ffffff;
   border: 1.5px solid var(--blue-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--blue-primary);
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .navbar__logo-icon svg {
@@ -92,12 +87,11 @@ ul {
   height: 18px;
 }
 
-/* Quando for <img> em vez de SVG */
 .navbar__logo-icon img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
 
 .navbar__logo-text {
@@ -164,7 +158,6 @@ ul {
   opacity: 0.6;
 }
 
-/* ---- Hero ---- */
 .hero {
   min-height: 100vh;
   padding-top: var(--nav-height);
@@ -177,7 +170,6 @@ ul {
   overflow: hidden;
 }
 
-/* Foto de fundo */
 .hero::after {
   content: '';
   position: absolute;
@@ -190,7 +182,6 @@ ul {
   opacity: var(--hero-bg-opacity);
 }
 
-/* Dark blue base + subtle radial glow */
 .hero::before {
   content: '';
   position: absolute;
@@ -202,7 +193,6 @@ ul {
   z-index: 0;
 }
 
-/* Grid pattern */
 .hero__grid {
   position: absolute;
   inset: 0;
@@ -214,7 +204,6 @@ ul {
   background-size: 52px 52px;
 }
 
-/* ---- Hero Text ---- */
 .hero__text {
   position: absolute;
   left: 60px;
@@ -237,7 +226,6 @@ ul {
   margin-top: 10px;
 }
 
-/* ---- Login Card ---- */
 .card {
   position: relative;
   z-index: 2;
@@ -258,7 +246,6 @@ ul {
   margin-bottom: 20px;
 }
 
-/* ---- Tabs ---- */
 .card__tabs {
   display: flex;
   gap: 8px;
@@ -288,7 +275,6 @@ ul {
   border-color: var(--blue-primary);
 }
 
-/* ---- Form ---- */
 .form__section-label {
   font-size: 12px;
   color: var(--text-muted);
@@ -345,7 +331,6 @@ ul {
   min-height: 16px;
 }
 
-/* Eye toggle */
 .form__eye {
   position: absolute;
   right: 10px;
@@ -374,7 +359,6 @@ ul {
   padding-right: 38px;
 }
 
-/* Forgot link */
 .form__forgot {
   text-align: right;
   margin: 4px 0 18px;
@@ -391,7 +375,7 @@ ul {
   text-decoration: underline;
 }
 
-/* ---- Primary Button ---- */
+/* FIX 3: spinner oculto por padrão via CSS, não depender só do atributo hidden */
 .btn-primary {
   width: 100%;
   padding: 11px;
@@ -425,7 +409,7 @@ ul {
   transform: none;
 }
 
-/* Spinner */
+/* FIX 3: spinner escondido por CSS por padrão */
 .btn-primary__spinner {
   width: 16px;
   height: 16px;
@@ -433,9 +417,13 @@ ul {
   border-top-color: #071628;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
 }
 
-/* ---- Divider ---- */
+.btn-primary__spinner[hidden] {
+  display: none;
+}
+
 .divider {
   display: flex;
   align-items: center;
@@ -455,7 +443,6 @@ ul {
   white-space: nowrap;
 }
 
-/* ---- Social Buttons ---- */
 .social-btns {
   display: flex;
   gap: 10px;
@@ -484,7 +471,6 @@ ul {
   color: var(--text-white);
 }
 
-/* ---- Signup line ---- */
 .signup {
   text-align: center;
   font-size: 12px;
@@ -501,7 +487,6 @@ ul {
   text-decoration: underline;
 }
 
-/* ---- Toast ---- */
 .toast {
   position: fixed;
   bottom: 28px;
@@ -536,7 +521,6 @@ ul {
   color: #ff9a9a;
 }
 
-/* ---- Animations ---- */
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -552,7 +536,7 @@ ul {
   to { transform: rotate(360deg); }
 }
 
-/* ---- Responsive ---- */
+/* FIX 4: mobile corrigido — hero__text sem position absolute no mobile */
 @media (max-width: 768px) {
   .hero {
     flex-direction: column;
@@ -563,8 +547,9 @@ ul {
   }
 
   .hero__text {
-    position: static;
+    position: static;   /* FIX 4: remove o absolute que conflitava com o card */
     text-align: center;
+    z-index: 2;         /* mantém acima do fundo */
   }
 
   .hero__title {
