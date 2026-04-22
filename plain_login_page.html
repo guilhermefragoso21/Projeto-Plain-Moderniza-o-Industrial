@@ -1,0 +1,117 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .page { min-height: 560px; background: #0a1a2e; position: relative; font-family: var(--font-sans); overflow: hidden; display: flex; flex-direction: column; }
+  .bg-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, #0d2247cc 0%, #0a3060bb 50%, #061830dd 100%); z-index: 0; }
+  .bg-img { position: absolute; inset: 0; background: url('') center/cover no-repeat; z-index: 0; opacity: 0.18; }
+  .grid-lines { position: absolute; inset: 0; z-index: 0; opacity: 0.07; background-image: linear-gradient(#4a9eff 1px, transparent 1px), linear-gradient(90deg, #4a9eff 1px, transparent 1px); background-size: 48px 48px; }
+  nav { position: relative; z-index: 2; display: flex; align-items: center; gap: 0; padding: 0 32px; height: 56px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .logo { display: flex; align-items: center; gap: 10px; margin-right: auto; }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .logo-plain { font-size: 22px; font-weight: 700; color: #4a9eff; letter-spacing: 1px; }
+  .logo-sub { font-size: 9px; color: rgba(255,255,255,0.55); letter-spacing: 0.5px; text-transform: uppercase; }
+  .logo-icon { width: 34px; height: 34px; border-radius: 50%; background: #1a3a5c; border: 2px solid #4a9eff; display: flex; align-items: center; justify-content: center; }
+  .logo-icon svg { width: 18px; height: 18px; }
+  nav a { color: rgba(255,255,255,0.7); font-size: 14px; text-decoration: none; padding: 0 18px; height: 56px; display: flex; align-items: center; transition: color 0.2s; }
+  nav a:hover { color: #fff; }
+  .lang-btn { margin-left: 12px; display: flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; padding: 5px 10px; color: rgba(255,255,255,0.8); font-size: 13px; cursor: pointer; background: transparent; }
+  .main { position: relative; z-index: 2; flex: 1; display: flex; align-items: center; justify-content: flex-end; padding: 40px 48px 48px; }
+  .left-text { position: absolute; left: 48px; bottom: 80px; }
+  .left-text h1 { font-size: 42px; font-weight: 700; color: #fff; line-height: 1.15; text-shadow: 0 2px 16px rgba(0,0,0,0.5); }
+  .left-text p { font-size: 16px; color: rgba(255,255,255,0.55); margin-top: 8px; }
+  .login-card { background: rgba(10, 40, 80, 0.88); border: 1px solid rgba(74, 158, 255, 0.2); border-radius: 12px; padding: 32px 28px; width: 360px; backdrop-filter: blur(2px); }
+  .card-title { font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 20px; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+  .tab { padding: 6px 18px; border-radius: 6px; font-size: 13px; cursor: pointer; border: 1px solid rgba(74,158,255,0.35); color: rgba(255,255,255,0.7); background: transparent; transition: all 0.2s; }
+  .tab.active { background: rgba(74,158,255,0.15); color: #fff; border-color: #4a9eff; }
+  .section-label { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 10px; letter-spacing: 0.3px; }
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .fields.full { grid-template-columns: 1fr; }
+  input[type=text], input[type=email], input[type=password] { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(74,158,255,0.25); border-radius: 7px; padding: 9px 12px; font-size: 13px; color: #fff; outline: none; transition: border-color 0.2s; }
+  input::placeholder { color: rgba(255,255,255,0.3); }
+  input:focus { border-color: #4a9eff; background: rgba(74,158,255,0.1); }
+  .forgot { text-align: right; margin: 6px 0 16px; }
+  .forgot a { font-size: 12px; color: #4a9eff; text-decoration: none; }
+  .forgot a:hover { text-decoration: underline; }
+  .btn-login { width: 100%; padding: 11px; background: #4a9eff; border: none; border-radius: 7px; font-size: 14px; font-weight: 600; color: #0a1a2e; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+  .btn-login:hover { background: #6ab0ff; }
+  .btn-login:active { transform: scale(0.98); }
+  .divider { display: flex; align-items: center; gap: 10px; margin: 16px 0; }
+  .divider span { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+  .divider p { font-size: 11px; color: rgba(255,255,255,0.35); }
+  .signup { text-align: center; font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 14px; }
+  .signup a { color: #4a9eff; text-decoration: none; }
+  .signup a:hover { text-decoration: underline; }
+  .dots { position: absolute; bottom: 20px; left: 48px; display: flex; gap: 6px; z-index: 2; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+  .dot.active { background: #4a9eff; }
+</style>
+
+<div class="page">
+  <div class="bg-overlay"></div>
+  <div class="grid-lines"></div>
+
+  <nav>
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#4a9eff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-plain">PLAIN</span>
+        <span class="logo-sub">Modernização Industrial</span>
+      </div>
+    </div>
+    <a href="#">Início</a>
+    <a href="#">Quem somos</a>
+    <a href="#">Contato</a>
+    <button class="lang-btn">🇧🇷 PT ▾</button>
+  </nav>
+
+  <div class="main">
+    <div class="left-text">
+      <h1>Soluções em<br>Automação Industrial</h1>
+      <p>Conecte-se à plataforma PLAIN</p>
+    </div>
+
+    <div class="login-card">
+      <div class="card-title">Entrar na plataforma</div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="this.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Empresa</button>
+        <button class="tab" onclick="this.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Pessoal</button>
+      </div>
+
+      <div class="section-label">Dados de acesso</div>
+
+      <div class="fields full" style="margin-bottom:10px;">
+        <input type="email" placeholder="E-mail corporativo" />
+      </div>
+      <div class="fields full">
+        <input type="password" placeholder="Senha" />
+      </div>
+
+      <div class="forgot"><a href="#">Esqueceu a senha?</a></div>
+
+      <button class="btn-login">Entrar</button>
+
+      <div class="divider">
+        <span></span><p>ou acesse com</p><span></span>
+      </div>
+
+      <div style="display:flex;gap:8px;">
+        <button style="flex:1;padding:9px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:7px;color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;">Google</button>
+        <button style="flex:1;padding:9px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:7px;color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;">Microsoft</button>
+      </div>
+
+      <div class="signup">Não tem conta? <a href="#">Solicite acesso</a></div>
+    </div>
+  </div>
+
+  <div class="dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</div>
