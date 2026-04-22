@@ -25,7 +25,7 @@ function switchTab(tab) {
   var forms = document.querySelectorAll(".card__form");
 
   tabs.forEach(function(t) { t.classList.remove("active"); });
-  forms.forEach(function(f) { f.classList.add("hidden"); };  // 🐛 bug aqui
+  forms.forEach(function(f) { f.classList.add("hidden"); });  // 
 
   document.getElementById("tab-" + tab).classList.add("active");
   document.getElementById("form-" + tab).classList.remove("hidden");
