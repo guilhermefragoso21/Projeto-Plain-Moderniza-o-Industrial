@@ -55,6 +55,7 @@
       text-decoration: none; margin-right: 8px;
     }
     .topbar__brand span { color: var(--cyan); }
+    .topbar__brand:hover { opacity: .85; transition: opacity .18s; }
 
     .topbar__search {
       flex: 1; max-width: 360px;
@@ -420,7 +421,7 @@
 
 <!-- TOPBAR -->
 <header class="topbar">
-  <a href="#" class="topbar__brand">PLAIN <span>·</span></a>
+  <a href="index.html" class="topbar__brand" title="Voltar ao início">PLAIN <span>·</span></a>
 
   <div class="topbar__search">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -686,7 +687,7 @@
         </div>
         <div class="metric-box">
           <div class="metric-box__value warn">3</div>
-          <div class="metric-box__label">Notificações</div>
+          <div class="metric-box__label">Alertas</div>
         </div>
         <div class="metric-box">
           <div class="metric-box__value up">↓ 18%</div>
@@ -697,7 +698,7 @@
 
     <!-- Notícias -->
     <div class="card widget-card">
-      <div class="widget-card__title">Notícias</div>
+      <div class="widget-card__title">Notícias do Setor</div>
       <div class="news-item">
         <div class="news-item__dot"></div>
         <div>
@@ -720,7 +721,7 @@
         </div>
       </div>
       <div class="news-item">
-        <div class="news-item__dot" style="background:var(--blue)"></div>
+        <div class="news-item__dot" style="background:var(--cyan)"></div>
         <div>
           <div class="news-item__title">Manutenção preditiva via IA reduz falhas em 40% nas montadoras</div>
           <div class="news-item__time">2 dias atrás · 3.450 leitores</div>
