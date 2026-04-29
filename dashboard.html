@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PLAIN – Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0a1628;
+      --navy2:   #0f2040;
+      --blue:    #1a56db;
+      --blue-lt: #2d6ff0;
+      --cyan:    #00d4ff;
+      --gray:    #e8edf5;
+      --gray2:   #c5cdd8;
+      --white:   #ffffff;
+      --text:    #1e293b;
+      --muted:   #64748b;
+      --card-bg: #ffffff;
+      --border:  #dde3ed;
+      --sidebar: #f3f6fb;
+      --green:   #16a34a;
+      --green-lt:#dcfce7;
+      --orange:  #ea580c;
+      --orange-lt:#ffedd5;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--gray);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── TOPBAR ─────────────────────────────────── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 56px;
+      background: var(--navy);
+      display: flex; align-items: center;
+      padding: 0 24px;
+      gap: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.35);
+    }
+    .topbar__brand {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px; font-weight: 800;
+      color: var(--white); letter-spacing: .04em;
+      text-decoration: none; margin-right: 8px;
+    }
+    .topbar__brand span { color: var(--cyan); }
+
+    .topbar__search {
+      flex: 1; max-width: 360px;
+      position: relative;
+    }
+    .topbar__search input {
+      width: 100%; height: 34px;
+      padding: 0 12px 0 36px;
+      border-radius: 6px;
+      border: none;
+      background: rgba(255,255,255,.12);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif; font-size: 14px;
+      outline: none;
+      transition: background .2s;
+    }
+    .topbar__search input::placeholder { color: rgba(255,255,255,.5); }
+    .topbar__search input:focus { background: rgba(255,255,255,.2); }
+    .topbar__search svg {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,.5); width: 16px; height: 16px;
+    }
+
+    .topbar__nav {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .topnav-btn {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 2px; padding: 6px 14px;
+      border-radius: 6px; border: none; background: none;
+      color: rgba(255,255,255,.6);
+      font-family: 'Barlow', sans-serif; font-size: 11px; font-weight: 600;
+      cursor: pointer; transition: all .18s;
+      text-decoration: none;
+    }
+    .topnav-btn svg { width: 20px; height: 20px; }
+    .topnav-btn:hover, .topnav-btn.active {
+      color: var(--white); background: rgba(255,255,255,.1);
+    }
+    .topnav-btn.active { color: var(--cyan); }
+
+    .topbar__divider {
+      width: 1px; height: 32px;
+      background: rgba(255,255,255,.15); margin: 0 8px;
+    }
+
+    .avatar-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--blue); border: 2px solid var(--cyan);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-weight: 700; font-size: 14px;
+      cursor: pointer; transition: border-color .2s;
+    }
+    .avatar-btn:hover { border-color: var(--white); }
+
+    /* ── LAYOUT ─────────────────────────────────── */
+    .layout {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: 240px 1fr 280px;
+      gap: 20px;
+      max-width: 1200px;
+      margin-left: auto; margin-right: auto;
+      padding: 24px 16px;
+    }
+
+    /* ── CARDS ─────────────────────────────────── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* ── LEFT SIDEBAR ───────────────────────────── */
+    .profile-card {
+      position: sticky; top: 76px;
+    }
+    .profile-card__banner {
+      height: 72px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+      position: relative;
+    }
+    .profile-card__banner::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 10px,
+        rgba(0,212,255,.06) 10px, rgba(0,212,255,.06) 20px
+      );
+    }
+    .profile-card__avatar-wrap {
+      display: flex; justify-content: center;
+      margin-top: -28px; position: relative; z-index: 1;
+    }
+    .profile-card__avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--blue);
+      border: 3px solid var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700; color: var(--white);
+    }
+    .profile-card__info {
+      padding: 10px 16px 16px;
+      text-align: center;
+    }
+    .profile-card__name {
+      font-weight: 700; font-size: 15px; color: var(--text);
+    }
+    .profile-card__role {
+      font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.4;
+    }
+    .profile-card__divider {
+      height: 1px; background: var(--border); margin: 12px 0;
+    }
+    .profile-card__stat {
+      display: flex; justify-content: space-between;
+      padding: 4px 16px; font-size: 12px; color: var(--muted);
+    }
+    .profile-card__stat span:last-child { font-weight: 600; color: var(--blue); }
+
+    .profile-card__links {
+      padding: 12px 16px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .profile-card__link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; border-radius: 8px;
+      font-size: 13px; font-weight: 600; color: var(--text);
+      text-decoration: none; cursor: pointer;
+      transition: background .15s;
+    }
+    .profile-card__link:hover { background: var(--sidebar); }
+    .profile-card__link svg { width: 18px; height: 18px; color: var(--blue); }
+    .profile-card__link.active { color: var(--blue); background: #eff6ff; }
+
+    /* ── FEED ───────────────────────────────────── */
+    .feed { display: flex; flex-direction: column; gap: 16px; }
+
+    .post-composer {
+      padding: 16px;
+    }
+    .post-composer__row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .post-composer__avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--blue); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: var(--white); font-size: 15px;
+    }
+    .post-composer__input {
+      flex: 1; height: 40px;
+      border: 1.5px solid var(--border); border-radius: 20px;
+      padding: 0 16px; font-family: 'Barlow', sans-serif; font-size: 14px;
+      background: none; outline: none; cursor: pointer; color: var(--muted);
+      transition: border-color .2s;
+    }
+    .post-composer__input:hover { border-color: var(--blue); color: var(--text); }
+    .post-composer__actions {
+      display: flex; gap: 4px; margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .composer-action {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px; border-radius: 6px; border: none; background: none;
+      font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600;
+      color: var(--muted); cursor: pointer; transition: all .15s;
+    }
+    .composer-action svg { width: 18px; height: 18px; }
+    .composer-action:hover { background: var(--sidebar); color: var(--blue); }
+
+    /* ── POST CARD ─────────────────────────────── */
+    .post-card { padding: 0; }
+    .post-card__header {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 16px 16px 0;
+    }
+    .post-card__avatar {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 16px; color: var(--white);
+    }
+    .av-blue   { background: linear-gradient(135deg, #1a56db, #2d6ff0); }
+    .av-teal   { background: linear-gradient(135deg, #0891b2, #06b6d4); }
+    .av-indigo { background: linear-gradient(135deg, #4338ca, #6366f1); }
+    .av-rose   { background: linear-gradient(135deg, #be123c, #f43f5e); }
+
+    .post-card__meta { flex: 1; }
+    .post-card__name { font-weight: 700; font-size: 14px; }
+    .post-card__role { font-size: 12px; color: var(--muted); }
+    .post-card__time { font-size: 11px; color: var(--gray2); margin-top: 2px; }
+
+    .post-card__more {
+      padding: 6px; border-radius: 6px; border: none; background: none;
+      color: var(--muted); cursor: pointer; transition: background .15s;
+    }
+    .post-card__more:hover { background: var(--sidebar); }
+    .post-card__more svg { width: 18px; height: 18px; display: block; }
+
+    .post-card__body {
+      padding: 12px 16px;
+      font-size: 14px; line-height: 1.6; color: var(--text);
+    }
+    .post-card__body strong { color: var(--blue); }
+
+    .post-card__image {
+      width: 100%; max-height: 300px; object-fit: cover;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .post-card__image-placeholder {
+      height: 200px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, var(--cyan) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 28px; font-weight: 800; color: var(--white);
+      letter-spacing: .08em;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .post-card__image-placeholder::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        -45deg, transparent, transparent 20px,
+        rgba(255,255,255,.04) 20px, rgba(255,255,255,.04) 40px
+      );
+    }
+    .post-card__image-placeholder span { position: relative; z-index: 1; }
+
+    .post-card__stats {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 16px;
+      font-size: 12px; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .post-card__reactions { display: flex; align-items: center; gap: 4px; }
+    .reaction-emoji { font-size: 14px; }
+
+    .post-card__actions {
+      display: flex; padding: 4px 8px;
+    }
+    .post-action {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      gap: 6px; padding: 9px 4px; border-radius: 6px; border: none; background: none;
+      font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600;
+      color: var(--muted); cursor: pointer; transition: all .15s;
+    }
+    .post-action svg { width: 18px; height: 18px; }
+    .post-action:hover { background: var(--sidebar); color: var(--blue); }
+
+    /* ── RIGHT SIDEBAR ──────────────────────────── */
+    .right-col { display: flex; flex-direction: column; gap: 16px; }
+
+    .widget-card { padding: 16px; }
+    .widget-card__title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 16px; font-weight: 800; color: var(--navy);
+      margin-bottom: 14px; letter-spacing: .03em;
+    }
+
+    /* News widget */
+    .news-item {
+      display: flex; gap: 10px; padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .news-item:last-child { border-bottom: none; }
+    .news-item__dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--blue); flex-shrink: 0; margin-top: 5px;
+    }
+    .news-item__title {
+      font-size: 13px; font-weight: 600; color: var(--text);
+      line-height: 1.4; cursor: pointer;
+    }
+    .news-item__title:hover { color: var(--blue); }
+    .news-item__time { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* Connections widget */
+    .connection-item {
+      display: flex; align-items: center; gap: 10px; padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .connection-item:last-child { border-bottom: none; }
+    .connection-item__avatar {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; color: var(--white);
+    }
+    .connection-item__info { flex: 1; min-width: 0; }
+    .connection-item__name { font-size: 13px; font-weight: 700; }
+    .connection-item__role { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .connect-btn {
+      padding: 5px 14px; border-radius: 16px;
+      border: 1.5px solid var(--blue); background: none;
+      color: var(--blue); font-family: 'Barlow', sans-serif;
+      font-size: 12px; font-weight: 600; cursor: pointer; transition: all .18s;
+      flex-shrink: 0;
+    }
+    .connect-btn:hover { background: var(--blue); color: var(--white); }
+    .connect-btn.connected {
+      border-color: var(--green); color: var(--green);
+    }
+    .connect-btn.connected:hover { background: var(--green); color: var(--white); }
+
+    /* Metrics widget */
+    .metrics-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .metric-box {
+      background: var(--sidebar); border-radius: 8px; padding: 12px;
+      text-align: center;
+    }
+    .metric-box__value {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px; font-weight: 800; color: var(--navy);
+    }
+    .metric-box__value.up { color: var(--green); }
+    .metric-box__value.warn { color: var(--orange); }
+    .metric-box__label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* ── BADGE / TAG ────────────────────────────── */
+    .tag {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 11px; font-weight: 600;
+    }
+    .tag-blue   { background: #eff6ff; color: var(--blue); }
+    .tag-green  { background: var(--green-lt); color: var(--green); }
+    .tag-orange { background: var(--orange-lt); color: var(--orange); }
+
+    /* ── ANIMATIONS ─────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .feed > * { animation: fadeUp .4s ease both; }
+    .feed > *:nth-child(1) { animation-delay: .05s; }
+    .feed > *:nth-child(2) { animation-delay: .12s; }
+    .feed > *:nth-child(3) { animation-delay: .19s; }
+    .feed > *:nth-child(4) { animation-delay: .26s; }
+
+    .profile-card { animation: fadeUp .35s ease both; }
+    .right-col > * { animation: fadeUp .4s ease both; }
+    .right-col > *:nth-child(1) { animation-delay: .1s; }
+    .right-col > *:nth-child(2) { animation-delay: .18s; }
+    .right-col > *:nth-child(3) { animation-delay: .26s; }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 960px) {
+      .layout { grid-template-columns: 220px 1fr; }
+      .right-col { display: none; }
+    }
+    @media (max-width: 640px) {
+      .layout { grid-template-columns: 1fr; padding: 12px; gap: 12px; }
+      .profile-card { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a href="#" class="topbar__brand">PLAIN <span>·</span></a>
+
+  <div class="topbar__search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" placeholder="Buscar empresas, pessoas, projetos…" />
+  </div>
+
+  <nav class="topbar__nav">
+    <button class="topnav-btn active">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Início
+    </button>
+    <button class="topnav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Rede
+    </button>
+    <button class="topnav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      Projetos
+    </button>
+    <button class="topnav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Mensagens
+    </button>
+    <div class="topbar__divider"></div>
+    <div class="avatar-btn" title="Meu Perfil">J</div>
+  </nav>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- LEFT: PROFILE -->
+  <aside>
+    <div class="card profile-card">
+      <div class="profile-card__banner"></div>
+      <div class="profile-card__avatar-wrap">
+        <div class="profile-card__avatar">J</div>
+      </div>
+      <div class="profile-card__info">
+        <div class="profile-card__name">João Silva</div>
+        <div class="profile-card__role">Engenheiro de Automação · PLAIN Industrial</div>
+      </div>
+      <div class="profile-card__divider"></div>
+      <div class="profile-card__stat"><span>Visualizações do perfil</span><span>142</span></div>
+      <div class="profile-card__stat"><span>Aparições em buscas</span><span>38</span></div>
+      <div class="profile-card__stat"><span>Conexões</span><span>214</span></div>
+      <div class="profile-card__links">
+        <a class="profile-card__link active">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          Feed
+        </a>
+        <a class="profile-card__link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          Equipamentos
+        </a>
+        <a class="profile-card__link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Manutenções
+        </a>
+        <a class="profile-card__link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          Relatórios
+        </a>
+        <a class="profile-card__link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          Monitoramento
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CENTER: FEED -->
+  <main class="feed">
+
+    <!-- COMPOSER -->
+    <div class="card post-composer">
+      <div class="post-composer__row">
+        <div class="post-composer__avatar">J</div>
+        <input class="post-composer__input" placeholder="Compartilhe uma atualização de projeto…" readonly />
+      </div>
+      <div class="post-composer__actions">
+        <button class="composer-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          Foto
+        </button>
+        <button class="composer-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          Vídeo
+        </button>
+        <button class="composer-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Artigo
+        </button>
+        <button class="composer-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Evento
+        </button>
+      </div>
+    </div>
+
+    <!-- POST 1 -->
+    <article class="card post-card">
+      <div class="post-card__header">
+        <div class="post-card__avatar av-blue">P</div>
+        <div class="post-card__meta">
+          <div class="post-card__name">PLAIN Industrial <span class="tag tag-blue" style="margin-left:6px">Empresa</span></div>
+          <div class="post-card__role">Modernização e Retrofit de Equipamentos Industriais</div>
+          <div class="post-card__time">2 horas atrás · 🌐</div>
+        </div>
+        <button class="post-card__more">
+          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+        </button>
+      </div>
+      <div class="post-card__body">
+        ✅ <strong>Case de Sucesso – Retrofit CNC na Indústria Metalmecânica</strong><br><br>
+        Concluímos com sucesso a modernização de 3 centros de usinagem CNC para um cliente do setor automotivo. O resultado foi uma <strong>redução de 34% no tempo de ciclo</strong> e eliminação total de paradas não programadas nos primeiros 60 dias de operação.<br><br>
+        Substituímos o CLP legado por um sistema Siemens S7-1500 com integração SCADA e rastreabilidade em tempo real via IIoT.<br><br>
+        <span class="tag tag-green">Retrofit</span>&nbsp;<span class="tag tag-blue">CNC</span>&nbsp;<span class="tag tag-blue">IIoT</span>&nbsp;<span class="tag tag-blue">Automação</span>
+      </div>
+      <div class="post-card__image-placeholder">
+        <span>PLAIN · RETROFIT CNC 2025</span>
+      </div>
+      <div class="post-card__stats">
+        <div class="post-card__reactions">
+          <span class="reaction-emoji">👍</span>
+          <span class="reaction-emoji">💡</span>
+          <span class="reaction-emoji">🔥</span>
+          <span style="margin-left:4px">247 reações</span>
+        </div>
+        <span>31 comentários · 18 compartilhamentos</span>
+      </div>
+      <div class="post-card__actions">
+        <button class="post-action" onclick="this.style.color='var(--blue)'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+          Curtir
+        </button>
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Comentar
+        </button>
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Compartilhar
+        </button>
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+          Enviar
+        </button>
+      </div>
+    </article>
+
+    <!-- POST 2 -->
+    <article class="card post-card">
+      <div class="post-card__header">
+        <div class="post-card__avatar av-teal">M</div>
+        <div class="post-card__meta">
+          <div class="post-card__name">Marina Costa</div>
+          <div class="post-card__role">Gestora de Manutenção · Grupo Voith</div>
+          <div class="post-card__time">5 horas atrás · 🌐</div>
+        </div>
+        <button class="post-card__more">
+          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+        </button>
+      </div>
+      <div class="post-card__body">
+        Quem mais acha que a gestão de manutenção ainda é subutilizada em ambientes industriais brasileiros? 🤔<br><br>
+        Temos feito uma transição de manutenção corretiva para <strong>manutenção preditiva baseada em IoT</strong> e os ganhos têm sido impressionantes. Sensores de vibração + análise de dados = menos surpresas na linha de produção.<br><br>
+        Compartilhe sua experiência nos comentários! 👇
+      </div>
+      <div class="post-card__stats">
+        <div class="post-card__reactions">
+          <span class="reaction-emoji">💡</span>
+          <span class="reaction-emoji">👍</span>
+          <span style="margin-left:4px">89 reações</span>
+        </div>
+        <span>44 comentários</span>
+      </div>
+      <div class="post-card__actions">
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+          Curtir
+        </button>
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Comentar
+        </button>
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Compartilhar
+        </button>
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+          Enviar
+        </button>
+      </div>
+    </article>
+
+    <!-- POST 3 -->
+    <article class="card post-card">
+      <div class="post-card__header">
+        <div class="post-card__avatar av-indigo">R</div>
+        <div class="post-card__meta">
+          <div class="post-card__name">Ricardo Alves <span class="tag tag-orange" style="margin-left:6px">Novo</span></div>
+          <div class="post-card__role">Especialista em Automação Industrial · Conexão sugerida</div>
+          <div class="post-card__time">1 dia atrás · 🌐</div>
+        </div>
+        <button class="post-card__more">
+          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+        </button>
+      </div>
+      <div class="post-card__body">
+        📊 <strong>Dados que impressionam:</strong> Empresas que investem em retrofit industrial economizam em média <strong>60–70% do custo</strong> de aquisição de equipamentos novos, mantendo performance equivalente ou superior.<br><br>
+        Modernização não é opcional — é estratégica. Especialmente no contexto econômico atual, onde CAPEX precisa ser justificado com precisão.<br><br>
+        Alguém aqui já fez o ROI comparativo entre retrofit vs. equipamento novo?
+      </div>
+      <div class="post-card__stats">
+        <div class="post-card__reactions">
+          <span class="reaction-emoji">🔥</span>
+          <span class="reaction-emoji">👍</span>
+          <span class="reaction-emoji">💡</span>
+          <span style="margin-left:4px">312 reações</span>
+        </div>
+        <span>67 comentários · 41 compartilhamentos</span>
+      </div>
+      <div class="post-card__actions">
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+          Curtir
+        </button>
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Comentar
+        </button>
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Compartilhar
+        </button>
+        <button class="post-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+          Enviar
+        </button>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="right-col">
+
+    <!-- Métricas -->
+    <div class="card widget-card">
+      <div class="widget-card__title">Seus Indicadores</div>
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-box__value up">↑ 94%</div>
+          <div class="metric-box__label">Disponibilidade</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-box__value">12</div>
+          <div class="metric-box__label">Projetos Ativos</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-box__value warn">3</div>
+          <div class="metric-box__label">Alertas</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-box__value up">↓ 18%</div>
+          <div class="metric-box__label">Downtime</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notícias -->
+    <div class="card widget-card">
+      <div class="widget-card__title">Notícias do Setor</div>
+      <div class="news-item">
+        <div class="news-item__dot"></div>
+        <div>
+          <div class="news-item__title">Indústria 4.0: Brasil avança no ranking global de automação</div>
+          <div class="news-item__time">3 horas atrás · 1.240 leitores</div>
+        </div>
+      </div>
+      <div class="news-item">
+        <div class="news-item__dot"></div>
+        <div>
+          <div class="news-item__title">Siemens lança nova linha de CLPs para retrofit em ambientes críticos</div>
+          <div class="news-item__time">8 horas atrás · 890 leitores</div>
+        </div>
+      </div>
+      <div class="news-item">
+        <div class="news-item__dot"></div>
+        <div>
+          <div class="news-item__title">ABIMAQ: crescimento de 12% na demanda por modernização industrial em 2025</div>
+          <div class="news-item__time">1 dia atrás · 2.100 leitores</div>
+        </div>
+      </div>
+      <div class="news-item">
+        <div class="news-item__dot" style="background:var(--cyan)"></div>
+        <div>
+          <div class="news-item__title">Manutenção preditiva via IA reduz falhas em 40% nas montadoras</div>
+          <div class="news-item__time">2 dias atrás · 3.450 leitores</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conexões sugeridas -->
+    <div class="card widget-card">
+      <div class="widget-card__title">Pessoas que você pode conhecer</div>
+      <div class="connection-item">
+        <div class="connection-item__avatar av-rose">A</div>
+        <div class="connection-item__info">
+          <div class="connection-item__name">Ana Ferreira</div>
+          <div class="connection-item__role">Gerente de Projetos Industriais</div>
+        </div>
+        <button class="connect-btn" onclick="toggleConnect(this)">+ Conectar</button>
+      </div>
+      <div class="connection-item">
+        <div class="connection-item__avatar av-teal">C</div>
+        <div class="connection-item__info">
+          <div class="connection-item__name">Carlos Mota</div>
+          <div class="connection-item__role">Engenheiro Eletricista · ABB</div>
+        </div>
+        <button class="connect-btn" onclick="toggleConnect(this)">+ Conectar</button>
+      </div>
+      <div class="connection-item">
+        <div class="connection-item__avatar av-indigo">L</div>
+        <div class="connection-item__info">
+          <div class="connection-item__name">Luciana Ramos</div>
+          <div class="connection-item__role">Diretora de Operações · WEG</div>
+        </div>
+        <button class="connect-btn" onclick="toggleConnect(this)">+ Conectar</button>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<script>
+  function toggleConnect(btn) {
+    if (btn.classList.contains('connected')) {
+      btn.classList.remove('connected');
+      btn.textContent = '+ Conectar';
+    } else {
+      btn.classList.add('connected');
+      btn.textContent = '✓ Conectado';
+    }
+  }
+</script>
+</body>
+</html>
