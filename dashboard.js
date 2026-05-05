@@ -1,7 +1,4 @@
-/* ═══════════════════════════════════════════════
-   PLAIN Dashboard — Interatividade
-   dashboard.js
-═══════════════════════════════════════════════ */
+
 
 /* ── CONECTAR ──────────────────────────────────── */
 function toggleConnect(btn) {
@@ -277,4 +274,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-}); // fim DOMContentLoaded
+}); // 
