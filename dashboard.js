@@ -1,5 +1,3 @@
-
-
 /* ── CONECTAR ──────────────────────────────────── */
 function toggleConnect(btn) {
   if (btn.classList.contains('connected')) {
