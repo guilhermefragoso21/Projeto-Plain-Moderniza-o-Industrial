@@ -1,5 +1,5 @@
 // ============================================================
-//  PLAIN – Back-end (API)  |  Node.js + Express + MySQL
+//  PLAIN
 
 // ============================================================
 
@@ -24,7 +24,7 @@ const pool = mysql.createPool({
 });
 
 // ============================================================
-//  POST /api/cadastro  )
+// cadastro 
 // ============================================================
 app.post("/api/cadastro", async (req, res) => {
   const { tipo, email, senha, dados } = req.body;
@@ -77,7 +77,7 @@ app.post("/api/cadastro", async (req, res) => {
 });
 
 // ============================================================
-//  POST /api/login 
+//  login 
 // ============================================================
 app.post("/api/login", async (req, res) => {
   const { email, senha } = req.body;
@@ -112,7 +112,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 // ============================================================
-//  GET /api/contas  
+//  contas  
 // ============================================================
 app.get("/api/contas", async (req, res) => {
   try {
@@ -125,7 +125,7 @@ app.get("/api/contas", async (req, res) => {
 });
 
 // ============================================================
-//  GET /api/conta/:usuarioId  
+//  usuarioId  
 // ============================================================
 app.get("/api/conta/:usuarioId", async (req, res) => {
   try {
@@ -144,7 +144,7 @@ app.get("/api/conta/:usuarioId", async (req, res) => {
 });
 
 // ============================================================
-//  GET /api/estatisticas  
+//  estatisticas  
 // ============================================================
 app.get("/api/estatisticas", async (req, res) => {
   try {
@@ -163,7 +163,7 @@ app.get("/api/estatisticas", async (req, res) => {
 });
 
 // ============================================================
-//  PUT /api/empresa/:usuarioId  
+//  usuarioId  
 // ============================================================
 app.put("/api/empresa/:usuarioId", async (req, res) => {
   const { razao_social, telefone, setor, cargo } = req.body;
@@ -181,7 +181,7 @@ app.put("/api/empresa/:usuarioId", async (req, res) => {
 });
 
 // ============================================================
-//  DELETE /api/conta/:usuarioId  
+//  delete usuarioId  
 // ============================================================
 app.delete("/api/conta/:usuarioId", async (req, res) => {
   try {
