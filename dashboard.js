@@ -1,3 +1,67 @@
+/* ── PERFIL REAL (vindo do servidor) ───────────── */
+var API = "http://localhost:3000";
+
+function escapeHtml(v) {
+  if (v === null || v === undefined || v === "") return "";
+  return String(v)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function carregarPerfil() {
+  var usuarioId = localStorage.getItem("usuario_id");
+
+  // Se ninguém estiver logado, volta para a tela de login
+  if (!usuarioId) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  fetch(API + "/api/conta/" + usuarioId)
+    .then(function (res) {
+      if (!res.ok) throw new Error("perfil nao encontrado");
+      return res.json();
+    })
+    .then(function (c) { aplicarPerfil(c); })
+    .catch(function () {
+      showToast("Não foi possível carregar seu perfil.");
+    });
+}
+
+function aplicarPerfil(c) {
+  var nome, role, inicial;
+
+  if (c.tipo_conta === "empresa") {
+    nome    = c.razao_social || "Empresa";
+    var partes = [];
+    if (c.setor) partes.push(c.setor);
+    if (c.cargo) partes.push(c.cargo);
+    role    = partes.join(" · ") || "Conta Empresa";
+    inicial = nome.charAt(0).toUpperCase();
+  } else {
+    nome    = ((c.nome || "") + " " + (c.sobrenome || "")).trim() || "Usuário";
+    var local = [c.cidade, c.estado].filter(Boolean).join(" · ");
+    role    = local || "Conta Pessoal";
+    inicial = (c.nome || "U").charAt(0).toUpperCase();
+  }
+
+  // Card de perfil (lateral)
+  setText("profileName", nome);
+  setText("profileRole", role);
+  setText("profileAvatar", inicial);
+  // Avatar do topo e do composer
+  setText("topAvatar", inicial);
+  setText("composerAvatar", inicial);
+
+  // Guarda a inicial para usar nos comentários
+  window.__inicialUsuario = inicial;
+}
+
+function setText(id, txt) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = txt;
+}
+
 /* ── CONECTAR ──────────────────────────────────── */
 function toggleConnect(btn) {
   if (btn.classList.contains('connected')) {
@@ -95,6 +159,9 @@ function submitComment(sendBtn) {
 /* ── INIT (aguarda o DOM carregar) ─────────────── */
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* CARREGA O PERFIL REAL DA CONTA LOGADA */
+  carregarPerfil();
+
   /* NAV TOPBAR */
   document.querySelectorAll('.topnav-btn').forEach(btn => {
     btn.addEventListener('click', function () {
@@ -184,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
           box.className = 'comment-box';
           box.style.cssText = 'padding:10px 16px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;';
           box.innerHTML = `
-            <div style="width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0;">J</div>
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0;">${window.__inicialUsuario || 'J'}</div>
             <input placeholder="Escreva um comentário…"
               style="flex:1;height:34px;border:1.5px solid var(--border);border-radius:20px;padding:0 14px;font-family:'Barlow',sans-serif;font-size:13px;outline:none;background:none;transition:border-color .2s;"
               onfocus="this.style.borderColor='var(--blue)'"
@@ -272,4 +339,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-}); // 
+}); //

@@ -1,5 +1,5 @@
 // ============================================================
-//  PLAIN – Back-end (API)  |  Node.js + Express + MySQL
+//  PLAIN – Back-end 
 
 // ============================================================
 
@@ -24,7 +24,7 @@ const pool = mysql.createPool({
 });
 
 // ============================================================
-//  POST /api/cadastro  -> cria conta (empresa ou pessoal)
+//  POST /api/cadastro  
 // ============================================================
 app.post("/api/cadastro", async (req, res) => {
   const { tipo, email, senha, dados } = req.body;
@@ -77,7 +77,7 @@ app.post("/api/cadastro", async (req, res) => {
 });
 
 // ============================================================
-//  POST /api/login 
+//  POST /api/login  -> valida credenciais
 // ============================================================
 app.post("/api/login", async (req, res) => {
   const { email, senha } = req.body;
@@ -112,12 +112,31 @@ app.post("/api/login", async (req, res) => {
 });
 
 // ============================================================
-//  GET /api/contas  
+//  GET /api/contas 
 // ============================================================
 app.get("/api/contas", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM vw_contas ORDER BY criado_em DESC");
     res.json(rows);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ erro: "Erro ao consultar." });
+  }
+});
+
+// ============================================================
+//  GET /api/conta/:usuarioId  
+// ============================================================
+app.get("/api/conta/:usuarioId", async (req, res) => {
+  try {
+    const [rows] = await pool.execute(
+      "SELECT * FROM vw_contas WHERE usuario_id = ?",
+      [req.params.usuarioId]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ erro: "Conta não encontrada." });
+    }
+    res.json(rows[0]);
   } catch (e) {
     console.error(e);
     res.status(500).json({ erro: "Erro ao consultar." });
@@ -143,7 +162,7 @@ app.put("/api/empresa/:usuarioId", async (req, res) => {
 });
 
 // ============================================================
-//  DELETE /api/conta/:usuarioId  
+//  DELETE /api/conta/:usuarioId  -> remove conta
 // ============================================================
 app.delete("/api/conta/:usuarioId", async (req, res) => {
   try {

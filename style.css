@@ -381,3 +381,115 @@ html, body {
 .card__signup-link:hover {
   color: var(--blue-accent);
 }
+
+/* Campo que ocupa a largura inteira do grid (ex.: Senha no cadastro) */
+.form-input--full {
+  grid-column: 1 / -1;
+}
+
+/* ===================== Dashboard / Perfil ===================== */
+.hero__content--dash {
+  justify-content: center;
+}
+
+.profile {
+  width: 480px;
+  max-width: 100%;
+}
+
+.profile__head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.profile__avatar {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.8rem;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--blue-accent) 0%, var(--blue-light) 100%);
+  box-shadow: 0 4px 20px rgba(26,140,255,0.35);
+}
+
+.profile__badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  border: 1px solid rgba(58,176,255,0.4);
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin-bottom: 6px;
+}
+
+.profile__name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.7rem;
+  line-height: 1.1;
+  color: var(--white);
+}
+
+.profile__email {
+  font-size: 0.86rem;
+  color: var(--white-70);
+  margin-top: 2px;
+}
+
+.profile__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.profile__item {
+  background: rgba(10,36,66,0.6);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--white-70);
+}
+
+.profile__value {
+  font-size: 0.95rem;
+  color: var(--white);
+  word-break: break-word;
+}
+
+.profile__logout {
+  background: transparent;
+  border: 1.5px solid var(--input-border);
+  box-shadow: none;
+}
+.profile__logout:hover {
+  background: var(--white-20);
+  opacity: 1;
+}
+
+@media (max-width: 540px) {
+  .profile__grid { grid-template-columns: 1fr; }
+}
