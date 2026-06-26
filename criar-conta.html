@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PLAIN – Login</title>
+  <title>PLAIN – Criar conta</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet" />
@@ -43,24 +43,45 @@
         <p class="hero__subtitle">Aumente a eficiência, reduza custos e prolongue a vida útil dos seus equipamentos com soluções tecnológicas avançadas.</p>
       </div>
 
-      <!-- ============ CARD DE LOGIN ============ -->
-      <div class="hero__card" id="card-login">
-        <h2 class="card__heading">Acessar conta</h2>
+      <!-- ============ CARD DE CRIAÇÃO DE CONTA ============ -->
+      <div class="hero__card" id="card-cadastro">
+        <h2 class="card__heading">Criar conta</h2>
+
+        <div class="card__tabs">
+          <button class="tab active" id="tab-empresa" onclick="switchTab('empresa')">Empresa</button>
+          <button class="tab" id="tab-pessoal" onclick="switchTab('pessoal')">Pessoal</button>
+        </div>
 
         <p class="card__section-label">Dados</p>
 
-        <div class="card__form" id="form-login">
-          <div class="form-grid form-grid--single">
+        <div class="card__form" id="form-empresa">
+          <div class="form-grid">
+            <input type="text" class="form-input" placeholder="Razão Social" />
+            <input type="text" class="form-input" placeholder="CNPJ" />
             <input type="email" class="form-input" placeholder="E-mail" />
-            <input type="password" class="form-input" placeholder="Senha" />
+            <input type="tel" class="form-input" placeholder="Telefone" />
+            <input type="text" class="form-input" placeholder="Setor" />
+            <input type="text" class="form-input" placeholder="Cargo" />
           </div>
-          <button class="form-submit" onclick="handleLogin()">Entrar</button>
-
-          <p class="card__signup-text">
-            Não tem uma conta?
-            <a href="criar-conta.html" class="card__signup-link">Criar conta</a>
-          </p>
+          <button class="form-submit" onclick="handleSubmit()">Entrar</button>
         </div>
+
+        <div class="card__form hidden" id="form-pessoal">
+          <div class="form-grid">
+            <input type="text" class="form-input" placeholder="Nome" />
+            <input type="text" class="form-input" placeholder="Sobrenome" />
+            <input type="email" class="form-input" placeholder="E-mail" />
+            <input type="tel" class="form-input" placeholder="Telefone" />
+            <input type="text" class="form-input" placeholder="Cidade" />
+            <input type="text" class="form-input" placeholder="Estado" />
+          </div>
+          <button class="form-submit" onclick="handleSubmit()">Entrar</button>
+        </div>
+
+        <p class="card__signup-text">
+          Já tem uma conta?
+          <a href="index.html" class="card__signup-link">Fazer login</a>
+        </p>
       </div>
 
     </div>

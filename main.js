@@ -5,40 +5,29 @@ function initImages() {
   var logo = document.getElementById("logo-img");
   var bg = document.getElementById("bg-img");
 
-  if (LOGO_SRC) {
-    logo.src = LOGO_SRC;
-    logo.style.display = "block";
-  } else {
-    logo.style.display = "none";
+  if (logo) {
+    if (LOGO_SRC) {
+      logo.src = LOGO_SRC;
+      logo.style.display = "block";
+    } else {
+      logo.style.display = "none";
+    }
   }
 
-  if (BG_SRC) {
-    bg.src = BG_SRC;
-    bg.style.display = "block";
-  } else {
-    bg.style.display = "none";
-  }
-}
-
-// Alterna entre o card de login e o card de criação de conta
-function showCard(card) {
-  var login = document.getElementById("card-login");
-  var cadastro = document.getElementById("card-cadastro");
-
-  if (card === "cadastro") {
-    login.classList.add("hidden");
-    cadastro.classList.remove("hidden");
-  } else {
-    cadastro.classList.add("hidden");
-    login.classList.remove("hidden");
+  if (bg) {
+    if (BG_SRC) {
+      bg.src = BG_SRC;
+      bg.style.display = "block";
+    } else {
+      bg.style.display = "none";
+    }
   }
 }
 
-// Alterna entre as abas Empresa / Pessoal (apenas dentro do card de cadastro)
+// Alterna entre as abas Empresa / Pessoal (página de criar conta)
 function switchTab(tab) {
-  var cadastro = document.getElementById("card-cadastro");
-  var tabs = cadastro.querySelectorAll(".tab");
-  var forms = cadastro.querySelectorAll(".card__form");
+  var tabs = document.querySelectorAll(".tab");
+  var forms = document.querySelectorAll(".card__form");
 
   tabs.forEach(function(t) { t.classList.remove("active"); });
   forms.forEach(function(f) { f.classList.add("hidden"); });
@@ -47,10 +36,9 @@ function switchTab(tab) {
   document.getElementById("form-" + tab).classList.remove("hidden");
 }
 
-// Validação genérica de um formulário de cadastro
+// Validação do formulário de cadastro (aba ativa)
 function handleSubmit() {
-  var cadastro = document.getElementById("card-cadastro");
-  var activeForm = cadastro.querySelector(".card__form:not(.hidden)");
+  var activeForm = document.querySelector(".card__form:not(.hidden)");
   validateAndGo(activeForm);
 }
 
@@ -61,6 +49,7 @@ function handleLogin() {
 }
 
 function validateAndGo(form) {
+  if (!form) return;
   var inputs = form.querySelectorAll(".form-input");
   var filled = true;
 
@@ -79,6 +68,3 @@ function validateAndGo(form) {
 }
 
 initImages();
-
-// Estado inicial: mostra o login, esconde o cadastro
-showCard("login");
