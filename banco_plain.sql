@@ -1,10 +1,4 @@
--- ============================================================
---  PLAIN – Modernização Industrial (Retrofit)
---  Banco de dados MySQL
---  Compatível com MySQL 8.x / MariaDB 10.4+
--- ============================================================
 
--- ---------- 1. Criação do banco ----------
 DROP DATABASE IF EXISTS plain_db;
 CREATE DATABASE plain_db
   CHARACTER SET utf8mb4
@@ -13,10 +7,7 @@ CREATE DATABASE plain_db
 USE plain_db;
 
 -- ============================================================
---  2. TABELA: usuarios
---  Guarda as credenciais de acesso (tela de login).
---  A senha NUNCA deve ser salva em texto puro:
---  o back-end grava o HASH (ex.: bcrypt) na coluna senha_hash.
+--   TABELA: usuarios
 -- ============================================================
 CREATE TABLE usuarios (
   id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -33,9 +24,7 @@ CREATE TABLE usuarios (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
---  3. TABELA: empresas
---  Dados do formulário "Empresa" da tela de criar conta.
---  Relacionamento 1:1 com usuarios.
+--   TABELA: empresas
 -- ============================================================
 CREATE TABLE empresas (
   id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -58,9 +47,7 @@ CREATE TABLE empresas (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
---  4. TABELA: pessoas
---  Dados do formulário "Pessoal" da tela de criar conta.
---  Relacionamento 1:1 com usuarios.
+--   TABELA: pessoas
 -- ============================================================
 CREATE TABLE pessoas (
   id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -82,8 +69,7 @@ CREATE TABLE pessoas (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
---  5. TABELA: sessoes  (opcional, mas recomendada)
---  Registra logins para autenticação por token / auditoria.
+--  TABELA: sessoes 
 -- ============================================================
 CREATE TABLE sessoes (
   id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -102,8 +88,7 @@ CREATE TABLE sessoes (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
---  6. VIEW: vw_contas
---  Junta usuário + dados específicos para consultas rápidas.
+--  VIEW: vw_contas
 -- ============================================================
 CREATE OR REPLACE VIEW vw_contas AS
 SELECT
@@ -126,9 +111,7 @@ LEFT JOIN empresas e ON e.usuario_id = u.id
 LEFT JOIN pessoas  p ON p.usuario_id = u.id;
 
 -- ============================================================
---  7. DADOS DE EXEMPLO (seed)
---  As senhas abaixo são apenas placeholders de hash.
---  No sistema real, gere o hash no back-end (bcrypt/argon2).
+--   DADOS DE EXEMPLO 
 -- ============================================================
 INSERT INTO usuarios (email, senha_hash, tipo_conta) VALUES
   ('contato@metalurgicaxyz.com.br', '$2y$10$exemploDeHashEmpresa000000000000000000000000', 'empresa'),
