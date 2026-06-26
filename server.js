@@ -1,13 +1,6 @@
 // ============================================================
 //  PLAIN – Back-end (API)  |  Node.js + Express + MySQL
-//  O "cérebro" do sistema: recebe requisições HTTP do site,
-//  valida as regras de negócio e conversa com o banco MySQL.
-//
-//  Instalar dependências:
-//    npm init -y
-//    npm install express mysql2 bcrypt cors
-//  Rodar:
-//    node server.js
+
 // ============================================================
 
 const express = require("express");
@@ -84,7 +77,7 @@ app.post("/api/cadastro", async (req, res) => {
 });
 
 // ============================================================
-//  POST /api/login  -> valida credenciais
+//  POST /api/login 
 // ============================================================
 app.post("/api/login", async (req, res) => {
   const { email, senha } = req.body;
@@ -119,7 +112,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 // ============================================================
-//  GET /api/contas  -> lista contas (consulta via VIEW)
+//  GET /api/contas  
 // ============================================================
 app.get("/api/contas", async (req, res) => {
   try {
@@ -132,7 +125,7 @@ app.get("/api/contas", async (req, res) => {
 });
 
 // ============================================================
-//  PUT /api/empresa/:usuarioId  -> atualiza dados da empresa
+//  PUT /api/empresa/:usuarioId  
 // ============================================================
 app.put("/api/empresa/:usuarioId", async (req, res) => {
   const { razao_social, telefone, setor, cargo } = req.body;
@@ -150,8 +143,7 @@ app.put("/api/empresa/:usuarioId", async (req, res) => {
 });
 
 // ============================================================
-//  DELETE /api/conta/:usuarioId  -> remove conta
-//  (ON DELETE CASCADE remove empresa/pessoa vinculada)
+//  DELETE /api/conta/:usuarioId  
 // ============================================================
 app.delete("/api/conta/:usuarioId", async (req, res) => {
   try {
