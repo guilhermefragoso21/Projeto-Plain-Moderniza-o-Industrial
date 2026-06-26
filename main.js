@@ -1,4 +1,4 @@
-var LOGO_SRC = "imagens/Logo PLAIN.png";    
+var LOGO_SRC = "imagens/Logo PLAIN.png";
 var BG_SRC   = "imagens/fundosite.png";
 
 function initImages() {
@@ -20,20 +20,48 @@ function initImages() {
   }
 }
 
+// Alterna entre o card de login e o card de criação de conta
+function showCard(card) {
+  var login = document.getElementById("card-login");
+  var cadastro = document.getElementById("card-cadastro");
+
+  if (card === "cadastro") {
+    login.classList.add("hidden");
+    cadastro.classList.remove("hidden");
+  } else {
+    cadastro.classList.add("hidden");
+    login.classList.remove("hidden");
+  }
+}
+
+// Alterna entre as abas Empresa / Pessoal (apenas dentro do card de cadastro)
 function switchTab(tab) {
-  var tabs = document.querySelectorAll(".tab");
-  var forms = document.querySelectorAll(".card__form");
+  var cadastro = document.getElementById("card-cadastro");
+  var tabs = cadastro.querySelectorAll(".tab");
+  var forms = cadastro.querySelectorAll(".card__form");
 
   tabs.forEach(function(t) { t.classList.remove("active"); });
-  forms.forEach(function(f) { f.classList.add("hidden"); });  // 
+  forms.forEach(function(f) { f.classList.add("hidden"); });
 
   document.getElementById("tab-" + tab).classList.add("active");
   document.getElementById("form-" + tab).classList.remove("hidden");
 }
 
+// Validação genérica de um formulário de cadastro
 function handleSubmit() {
-  var activeForm = document.querySelector(".card__form:not(.hidden)");
-  var inputs = activeForm.querySelectorAll(".form-input");
+  var cadastro = document.getElementById("card-cadastro");
+  var activeForm = cadastro.querySelector(".card__form:not(.hidden)");
+  validateAndGo(activeForm);
+}
+
+// Validação do formulário de login
+function handleLogin() {
+  var loginForm = document.getElementById("form-login");
+  validateAndGo(loginForm);
+}
+
+function validateAndGo(form) {
+  var inputs = form.querySelectorAll(".form-input");
   var filled = true;
 
   inputs.forEach(function(input) {
@@ -46,6 +74,8 @@ function handleSubmit() {
   });
 
   if (filled) {
-     window.location.href = "dashboard.html";
-   }
+    window.location.href = "dashboard.html";
+  }
 }
+
+initImages();

@@ -43,8 +43,29 @@
         <p class="hero__subtitle">Aumente a eficiência, reduza custos e prolongue a vida útil dos seus equipamentos com soluções tecnológicas avançadas.</p>
       </div>
 
-      <div class="hero__card">
-        <h2 class="card__heading">Entre em contato</h2>
+      <!-- ============ CARD DE LOGIN ============ -->
+      <div class="hero__card" id="card-login">
+        <h2 class="card__heading">Acessar conta</h2>
+
+        <p class="card__section-label">Dados</p>
+
+        <div class="card__form" id="form-login">
+          <div class="form-grid form-grid--single">
+            <input type="email" class="form-input" placeholder="E-mail" />
+            <input type="password" class="form-input" placeholder="Senha" />
+          </div>
+          <button class="form-submit" onclick="handleLogin()">Entrar</button>
+
+          <p class="card__signup-text">
+            Não tem uma conta?
+            <button type="button" class="card__signup-link" onclick="showCard('cadastro')">Criar conta</button>
+          </p>
+        </div>
+      </div>
+
+      <!-- ============ CARD DE CRIAÇÃO DE CONTA ============ -->
+      <div class="hero__card hidden" id="card-cadastro">
+        <h2 class="card__heading">Criar conta</h2>
 
         <div class="card__tabs">
           <button class="tab active" id="tab-empresa" onclick="switchTab('empresa')">Empresa</button>
@@ -76,7 +97,13 @@
           </div>
           <button class="form-submit" onclick="handleSubmit()">Entrar</button>
         </div>
+
+        <p class="card__signup-text">
+          Já tem uma conta?
+          <button type="button" class="card__signup-link" onclick="showCard('login')">Fazer login</button>
+        </p>
       </div>
+
     </div>
   </main>
 
