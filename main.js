@@ -92,7 +92,8 @@ function handleSubmit() {
   // Detecta qual aba está ativa pelo id do formulário
   if (activeForm.id === "form-empresa") {
     tipo  = "empresa";
-    email = inputs[2].value.trim();   // Razão Social, CNPJ, E-mail, Telefone, Setor, Cargo
+    email = inputs[2].value.trim();   // Razão Social, CNPJ, E-mail, Telefone, Setor, Cargo, Senha
+    senha = inputs[6].value;
     dados = {
       razao_social: inputs[0].value.trim(),
       cnpj:         inputs[1].value.replace(/\D/g, ""), // só dígitos
@@ -102,7 +103,8 @@ function handleSubmit() {
     };
   } else {
     tipo  = "pessoal";
-    email = inputs[2].value.trim();   // Nome, Sobrenome, E-mail, Telefone, Cidade, Estado
+    email = inputs[2].value.trim();   // Nome, Sobrenome, E-mail, Telefone, Cidade, Estado, Senha
+    senha = inputs[6].value;
     dados = {
       nome:      inputs[0].value.trim(),
       sobrenome: inputs[1].value.trim(),
@@ -111,10 +113,6 @@ function handleSubmit() {
       estado:    inputs[5].value.trim()
     };
   }
-
-  // Pede uma senha para a nova conta (os formulários de cadastro não têm campo de senha)
-  senha = prompt("Crie uma senha para sua conta:");
-  if (!senha) { alert("É preciso definir uma senha."); return; }
 
   var corpo = { tipo: tipo, email: email, senha: senha, dados: dados };
 
@@ -138,3 +136,16 @@ function handleSubmit() {
 }
 
 initImages();
+
+// Mostrar / ocultar senha (botão de olho no campo de senha)
+function togglePassword(btn) {
+  var input = btn.parentElement.querySelector(".form-input");
+  if (!input) return;
+  if (input.type === "password") {
+    input.type = "text";
+    btn.setAttribute("aria-label", "Ocultar senha");
+  } else {
+    input.type = "password";
+    btn.setAttribute("aria-label", "Mostrar senha");
+  }
+}

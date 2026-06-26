@@ -1,5 +1,5 @@
 // ============================================================
-//  PLAIN – Back-end 
+//  PLAIN – Back-end (API)  |  Node.js + Express + MySQL
 
 // ============================================================
 
@@ -17,14 +17,14 @@ app.use(express.static(".")); // serve index.html, criar-conta.html, etc.
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "SUA_SENHA_AQUI",
+  password: "212026",
   database: "plain_db",
   waitForConnections: true,
   connectionLimit: 10
 });
 
 // ============================================================
-//  POST /api/cadastro  
+//  POST /api/cadastro  )
 // ============================================================
 app.post("/api/cadastro", async (req, res) => {
   const { tipo, email, senha, dados } = req.body;
@@ -77,7 +77,7 @@ app.post("/api/cadastro", async (req, res) => {
 });
 
 // ============================================================
-//  POST /api/login  -> valida credenciais
+//  POST /api/login 
 // ============================================================
 app.post("/api/login", async (req, res) => {
   const { email, senha } = req.body;
@@ -112,7 +112,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 // ============================================================
-//  GET /api/contas 
+//  GET /api/contas  
 // ============================================================
 app.get("/api/contas", async (req, res) => {
   try {
@@ -144,6 +144,25 @@ app.get("/api/conta/:usuarioId", async (req, res) => {
 });
 
 // ============================================================
+//  GET /api/estatisticas  
+// ============================================================
+app.get("/api/estatisticas", async (req, res) => {
+  try {
+    const [tot] = await pool.query("SELECT COUNT(*) AS n FROM usuarios");
+    const [emp] = await pool.query("SELECT COUNT(*) AS n FROM empresas");
+    const [pes] = await pool.query("SELECT COUNT(*) AS n FROM pessoas");
+    res.json({
+      total_contas: tot[0].n,
+      total_empresas: emp[0].n,
+      total_pessoas: pes[0].n
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ erro: "Erro ao consultar estatísticas." });
+  }
+});
+
+// ============================================================
 //  PUT /api/empresa/:usuarioId  
 // ============================================================
 app.put("/api/empresa/:usuarioId", async (req, res) => {
@@ -162,7 +181,7 @@ app.put("/api/empresa/:usuarioId", async (req, res) => {
 });
 
 // ============================================================
-//  DELETE /api/conta/:usuarioId  -> remove conta
+//  DELETE /api/conta/:usuarioId  
 // ============================================================
 app.delete("/api/conta/:usuarioId", async (req, res) => {
   try {

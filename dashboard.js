@@ -62,6 +62,32 @@ function setText(id, txt) {
   if (el) el.textContent = txt;
 }
 
+// Busca contagens reais do banco e preenche o card de estatísticas
+function carregarEstatisticas() {
+  fetch(API + "/api/estatisticas")
+    .then(function (res) {
+      if (!res.ok) throw new Error("estatisticas indisponiveis");
+      return res.json();
+    })
+    .then(function (s) {
+      setText("statContas", s.total_contas);
+      setText("statEmpresas", s.total_empresas);
+      setText("statPessoas", s.total_pessoas);
+    })
+    .catch(function () {
+      setText("statContas", "—");
+      setText("statEmpresas", "—");
+      setText("statPessoas", "—");
+    });
+}
+
+// Encerra a sessão e volta para o login
+function logout() {
+  localStorage.removeItem("usuario_id");
+  localStorage.removeItem("tipo_conta");
+  window.location.href = "index.html";
+}
+
 /* ── CONECTAR ──────────────────────────────────── */
 function toggleConnect(btn) {
   if (btn.classList.contains('connected')) {
@@ -161,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* CARREGA O PERFIL REAL DA CONTA LOGADA */
   carregarPerfil();
+  carregarEstatisticas();
 
   /* NAV TOPBAR */
   document.querySelectorAll('.topnav-btn').forEach(btn => {
@@ -178,9 +205,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* AVATAR */
-  document.querySelector('.avatar-btn').addEventListener('click', () => {
-    showToast('Meu Perfil — em breve!');
+  /* AVATAR (abre menu com opção Sair) */
+  document.querySelector('.avatar-btn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    document.querySelectorAll('.avatar-menu').forEach(m => m.remove());
+
+    var menu = document.createElement('div');
+    menu.className = 'avatar-menu';
+    menu.style.cssText =
+      'position:absolute;right:0;top:calc(100% + 8px);background:#fff;' +
+      'border:1px solid var(--border);border-radius:10px;' +
+      'box-shadow:0 8px 24px rgba(0,0,0,.18);min-width:160px;z-index:300;overflow:hidden;';
+
+    var sair = document.createElement('button');
+    sair.textContent = 'Sair';
+    sair.style.cssText =
+      'display:block;width:100%;padding:11px 16px;border:none;background:none;text-align:left;' +
+      "font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;";
+    sair.onmouseenter = function () { sair.style.background = 'var(--sidebar)'; };
+    sair.onmouseleave = function () { sair.style.background = 'none'; };
+    sair.onclick = function () { logout(); };
+    menu.appendChild(sair);
+
+    this.style.position = 'relative';
+    this.appendChild(menu);
+    setTimeout(function () {
+      document.addEventListener('click', function () { menu.remove(); }, { once: true });
+    }, 0);
   });
 
   /* BUSCA */
