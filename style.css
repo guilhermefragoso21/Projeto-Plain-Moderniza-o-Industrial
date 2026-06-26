@@ -351,7 +351,7 @@ html, body {
 }
 
 /* ===== Aba de login / criação de conta ===== */
-.hero__card.hidden { display: none; }
+.hero__card.hidden { display: none !important; }
 
 .form-grid--single {
   grid-template-columns: 1fr;

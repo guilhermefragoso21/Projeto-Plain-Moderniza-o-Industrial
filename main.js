@@ -79,3 +79,6 @@ function validateAndGo(form) {
 }
 
 initImages();
+
+// Estado inicial: mostra o login, esconde o cadastro
+showCard("login");
