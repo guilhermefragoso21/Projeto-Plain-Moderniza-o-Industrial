@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PLAIN – Projetos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body data-pagina="projetos">
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a href="dashboard.html" class="topbar__brand" title="Voltar ao feed">PLAIN <span>·</span></a>
+
+  <div class="topbar__search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" placeholder="Buscar empresas, pessoas, projetos…" />
+  </div>
+
+  <nav class="topbar__nav">
+    <a href="dashboard.html" class="topnav-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Início
+    </a>
+    <a href="rede.html" class="topnav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Rede
+    </a>
+    <a href="projetos.html" class="topnav-btn active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      Projetos
+    </a>
+    <a href="mensagens.html" class="topnav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Mensagens
+    </a>
+    <div class="topbar__divider"></div>
+    <div class="avatar-btn" title="Meu Perfil" id="topAvatar">·</div>
+  </nav>
+</header>
+
+<div class="layout layout--2col">
+
+  <!-- LEFT: PROFILE -->
+  <aside>
+    <div class="card profile-card">
+      <div class="profile-card__banner"></div>
+      <div class="profile-card__avatar-wrap">
+        <div class="profile-card__avatar" id="profileAvatar">·</div>
+      </div>
+      <div class="profile-card__info">
+        <div class="profile-card__name" id="profileName">Carregando…</div>
+        <div class="profile-card__role" id="profileRole">&nbsp;</div>
+      </div>
+      <div class="profile-card__divider"></div>
+      <div class="profile-card__stat"><span>Projetos</span><span id="statTotal">—</span></div>
+      <div class="profile-card__stat"><span>Em andamento</span><span id="statAndamento">—</span></div>
+      <div class="profile-card__stat"><span>Concluídos</span><span id="statConcluidos">—</span></div>
+      <div style="height:12px"></div>
+    </div>
+  </aside>
+
+  <main class="page-main">
+
+    <div class="card page-head">
+      <div>
+        <h1 class="page-head__title">Meus Projetos</h1>
+        <p class="page-head__sub">Cadastre e acompanhe seus projetos de retrofit e manutenção.</p>
+      </div>
+      <button class="btn btn-primary" id="btnNovoProjeto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Novo projeto
+      </button>
+    </div>
+
+    <div class="card filter-bar" id="filtros">
+      <button class="chip active" data-filtro="todos">Todos <span class="chip__count" data-count="todos">0</span></button>
+      <button class="chip" data-filtro="planejamento">Planejamento <span class="chip__count" data-count="planejamento">0</span></button>
+      <button class="chip" data-filtro="em_andamento">Em andamento <span class="chip__count" data-count="em_andamento">0</span></button>
+      <button class="chip" data-filtro="concluido">Concluídos <span class="chip__count" data-count="concluido">0</span></button>
+      <button class="chip" data-filtro="pausado">Pausados <span class="chip__count" data-count="pausado">0</span></button>
+    </div>
+
+    <div class="project-list" id="listaProjetos">
+      <div class="card empty-state"><div class="empty-state__text">Carregando projetos…</div></div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL: NOVO / EDITAR PROJETO -->
+<div class="modal-overlay" id="modalProjeto" hidden>
+  <form class="modal" id="formProjeto" novalidate>
+    <div class="modal__head">
+      <h2 class="modal__title" id="modalTitulo">Novo projeto</h2>
+      <button type="button" class="modal__close" data-fechar aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="field field--full">
+        <label for="fTitulo">Título do projeto</label>
+        <input id="fTitulo" maxlength="150" placeholder="Ex.: Retrofit torno CNC Romi" />
+        <span class="field__error" id="erroTitulo" hidden>Informe o título do projeto.</span>
+      </div>
+      <div class="field field--full">
+        <label for="fCliente">Cliente / Equipamento <small>(opcional)</small></label>
+        <input id="fCliente" maxlength="150" placeholder="Ex.: Metalúrgica XYZ — Linha 2" />
+      </div>
+      <div class="field">
+        <label for="fStatus">Status</label>
+        <select id="fStatus">
+          <option value="planejamento">Planejamento</option>
+          <option value="em_andamento">Em andamento</option>
+          <option value="concluido">Concluído</option>
+          <option value="pausado">Pausado</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="fPrazo">Prazo <small>(opcional)</small></label>
+        <input id="fPrazo" type="date" />
+      </div>
+      <div class="field field--full">
+        <label for="fDescricao">Descrição <small>(opcional)</small></label>
+        <textarea id="fDescricao" placeholder="O que será feito, escopo, observações…"></textarea>
+      </div>
+    </div>
+    <div class="modal__foot">
+      <button type="button" class="btn btn-ghost" data-fechar>Cancelar</button>
+      <button type="submit" class="btn btn-primary" id="btnSalvar">Salvar projeto</button>
+    </div>
+  </form>
+</div>
+<script src="comum.js"></script>
+<script src="projetos.js"></script>
+</body>
+</html>

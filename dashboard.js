@@ -81,6 +81,22 @@ function carregarEstatisticas() {
     });
 }
 
+// Conta os projetos "em andamento" do usuário (widget Seus Indicadores)
+function carregarProjetosAtivos() {
+  var usuarioId = localStorage.getItem("usuario_id");
+  if (!usuarioId) return;
+  fetch(API + "/api/projetos/" + usuarioId)
+    .then(function (res) {
+      if (!res.ok) throw new Error("projetos indisponiveis");
+      return res.json();
+    })
+    .then(function (lista) {
+      var ativos = lista.filter(function (p) { return p.status === "em_andamento"; }).length;
+      setText("metricProjetos", ativos);
+    })
+    .catch(function () { setText("metricProjetos", "—"); });
+}
+
 // Encerra a sessão e volta para o login
 function logout() {
   localStorage.removeItem("usuario_id");
@@ -188,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* CARREGA O PERFIL REAL DA CONTA LOGADA */
   carregarPerfil();
   carregarEstatisticas();
+  carregarProjetosAtivos();
 
   /* NAV TOPBAR */
   document.querySelectorAll('.topnav-btn').forEach(btn => {
@@ -238,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.querySelector('.topbar__search input');
   searchInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && this.value.trim()) {
-      showToast(`Buscando por "${this.value.trim()}"…`);
+      window.location.href = 'rede.html?q=' + encodeURIComponent(this.value.trim());
     }
   });
 
@@ -385,6 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
       box.style.boxShadow = '';
     });
     box.addEventListener('click', () => {
+      if (box.querySelector('#metricProjetos')) { window.location.href = 'projetos.html'; return; }
       const label = box.querySelector('.metric-box__label').textContent;
       showToast(`📊 Abrindo detalhes: ${label}`);
     });
