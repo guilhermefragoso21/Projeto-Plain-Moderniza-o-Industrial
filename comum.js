@@ -1,6 +1,5 @@
 /* ============================================================
-   PLAIN — funções compartilhadas pelas páginas Rede, Projetos
-   e Mensagens. Carregue este arquivo ANTES do script da página.
+   PLAIN
    ============================================================ */
 var API = "http://localhost:3000";
 var USUARIO_ID = localStorage.getItem("usuario_id");

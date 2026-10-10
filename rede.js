@@ -1,7 +1,5 @@
 /* ============================================================
-   PLAIN — Página Rede
-   Lista as contas cadastradas e salva conexões no banco.
-   Depende de comum.js (API, USUARIO_ID, api(), showToast...).
+   PLAIN 
    ============================================================ */
 var contas = [];
 var abaAtual = "todos";

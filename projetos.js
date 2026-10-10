@@ -1,7 +1,5 @@
 /* ============================================================
-   PLAIN — Página de Projetos
-   Lista, cria, edita, muda status e exclui projetos no banco.
-   Depende de comum.js (API, USUARIO_ID, api(), showToast...).
+   PLAIN 
    ============================================================ */
 var projetos = [];
 var filtroAtual = "todos";

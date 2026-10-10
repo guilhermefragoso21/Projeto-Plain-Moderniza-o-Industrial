@@ -90,7 +90,7 @@ CREATE TABLE sessoes (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
---  TABELA: projetos  (cada projeto pertence a um usuário)
+--  TABELA: projetos  
 -- ============================================================
 CREATE TABLE projetos (
   id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -113,7 +113,7 @@ CREATE TABLE projetos (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
---  TABELA: conexoes  (usuario_id se conectou a conectado_id)
+--  TABELA: conexoes  
 -- ============================================================
 CREATE TABLE conexoes (
   id              INT UNSIGNED NOT NULL AUTO_INCREMENT,

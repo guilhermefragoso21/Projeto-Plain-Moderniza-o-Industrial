@@ -1,13 +1,11 @@
 -- ============================================================
---  PLAIN — atualização do banco (Rede + Projetos)
---  Rode este arquivo UMA vez no banco que já existe.
---  Ele NÃO apaga nada: só cria as tabelas novas se não existirem.
+--  PLAIN — atualização do banco 
 -- ============================================================
 SET NAMES utf8mb4;
 USE plain_db;
 
 -- ============================================================
---  TABELA: projetos  (cada projeto pertence a um usuário)
+--  TABELA: projetos  
 -- ============================================================
 CREATE TABLE IF NOT EXISTS projetos (
   id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -30,7 +28,7 @@ CREATE TABLE IF NOT EXISTS projetos (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
---  TABELA: conexoes  (usuario_id se conectou a conectado_id)
+--  TABELA: conexoes  
 -- ============================================================
 CREATE TABLE IF NOT EXISTS conexoes (
   id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
