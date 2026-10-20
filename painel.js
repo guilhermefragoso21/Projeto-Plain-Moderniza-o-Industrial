@@ -1,9 +1,5 @@
 /* ============================================================
-   PLAIN — Menu interativo do Início
-   Seções: Equipamentos, Manutenções, Relatórios, Monitoramento
-   Navegação por "#" na URL (ex.: dashboard.html#equipamentos),
-   então o botão Voltar do navegador funciona.
-   Usa escapeHtml, setText e showToast definidos em dashboard.js.
+   PLAIN — Menu interativo.
    ============================================================ */
 (function () {
   var U = localStorage.getItem("usuario_id");
