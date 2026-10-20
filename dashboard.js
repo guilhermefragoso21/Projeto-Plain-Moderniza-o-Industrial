@@ -214,13 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* SIDEBAR LINKS */
-  document.querySelectorAll('.profile-card__link').forEach(link => {
-    link.addEventListener('click', function () {
-      document.querySelectorAll('.profile-card__link').forEach(l => l.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
+  /* SIDEBAR LINKS: a navegação entre seções fica no painel.js */
 
   /* AVATAR (abre menu com opção Sair) */
   document.querySelector('.avatar-btn').addEventListener('click', function (e) {
@@ -402,9 +396,10 @@ document.addEventListener('DOMContentLoaded', () => {
       box.style.boxShadow = '';
     });
     box.addEventListener('click', () => {
-      if (box.querySelector('#metricProjetos')) { window.location.href = 'projetos.html'; return; }
-      const label = box.querySelector('.metric-box__label').textContent;
-      showToast(`📊 Abrindo detalhes: ${label}`);
+      if (box.querySelector('#metricProjetos'))       { window.location.href = 'projetos.html'; return; }
+      if (box.querySelector('#metricDisponibilidade')) { window.location.hash = 'monitoramento'; return; }
+      if (box.querySelector('#metricAlertas'))         { window.location.hash = 'monitoramento'; return; }
+      if (box.querySelector('#metricConcluidos'))      { window.location.hash = 'relatorios'; return; }
     });
   });
 

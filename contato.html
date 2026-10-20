@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PLAIN – Contato</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<!-- data-publica: pode ser aberta sem login -->
+<body data-pagina="contato" data-publica>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a href="dashboard.html" class="topbar__brand" title="Voltar ao feed">PLAIN <span>·</span></a>
+
+  <div class="topbar__search" data-so-logado>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" placeholder="Buscar empresas, pessoas, projetos…" />
+  </div>
+
+  <nav class="topbar__nav">
+    <a href="dashboard.html" class="topnav-btn" data-so-logado>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Início
+    </a>
+    <a href="rede.html" class="topnav-btn" data-so-logado>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Rede
+    </a>
+    <a href="projetos.html" class="topnav-btn" data-so-logado>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      Projetos
+    </a>
+    <a href="mensagens.html" class="topnav-btn" data-so-logado>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Mensagens
+    </a>
+    <a href="quem-somos.html" class="topnav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      Quem somos
+    </a>
+    <a href="contato.html" class="topnav-btn active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Contato
+    </a>
+    <div class="topbar__divider"></div>
+    <div class="avatar-btn" title="Meu Perfil" id="topAvatar" data-so-logado>·</div>
+    <a href="index.html" class="btn btn-primary btn-sm" data-so-deslogado>Entrar</a>
+  </nav>
+</header>
+
+<div class="layout layout--inst">
+  <main class="page-main">
+
+    <!-- ABERTURA -->
+    <section class="card inst-hero">
+      <span class="inst-hero__eyebrow">Contato</span>
+      <h1 class="inst-hero__title">Fale com a equipe PLAIN</h1>
+      <p class="inst-hero__text">
+        Dúvidas, sugestões, problemas na conta ou interesse em parcerias —
+        envie sua mensagem pelo formulário abaixo e responderemos pelo e-mail informado.
+      </p>
+    </section>
+
+    <div class="contact-layout">
+
+      <!-- FORMULÁRIO -->
+      <section class="card" id="cardFormulario">
+        <form class="contact-form" id="formContato" novalidate>
+          <h2 class="inst-section__title" style="margin-bottom:2px">Envie uma mensagem</h2>
+          <p class="page-head__sub">Todos os campos são obrigatórios.</p>
+
+          <div class="contact-form__grid">
+            <div class="field">
+              <label for="cNome">Nome</label>
+              <input id="cNome" maxlength="150" autocomplete="name" placeholder="Seu nome ou da empresa" />
+              <span class="field__error" id="erroNome" hidden>Informe seu nome.</span>
+            </div>
+            <div class="field">
+              <label for="cEmail">E-mail</label>
+              <input id="cEmail" type="email" maxlength="150" autocomplete="email" placeholder="voce@email.com" />
+              <span class="field__error" id="erroEmail" hidden>Informe um e-mail válido.</span>
+            </div>
+            <div class="field field--full">
+              <label for="cAssunto">Assunto</label>
+              <select id="cAssunto">
+                <option value="duvida">Dúvida sobre a plataforma</option>
+                <option value="sugestao">Sugestão de melhoria</option>
+                <option value="problema">Problema na conta ou no site</option>
+                <option value="parceria">Parceria ou divulgação</option>
+                <option value="outro">Outro assunto</option>
+              </select>
+            </div>
+            <div class="field field--full">
+              <label for="cMensagem">Mensagem</label>
+              <textarea id="cMensagem" maxlength="2000" rows="6" placeholder="Conte com detalhes como podemos ajudar…"></textarea>
+              <div style="display:flex;justify-content:space-between;gap:8px">
+                <span class="field__error" id="erroMensagem" hidden>Escreva pelo menos 10 caracteres.</span>
+                <span class="field__hint" id="contador" style="margin-left:auto">0 / 2000</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form__foot">
+            <span class="contact-form__note">Seus dados são usados só para responder a esta mensagem.</span>
+            <button type="submit" class="btn btn-primary" id="btnEnviar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+              Enviar mensagem
+            </button>
+          </div>
+        </form>
+
+        <!-- Mostrado depois do envio -->
+        <div class="contact-success" id="sucessoContato" hidden>
+          <div class="empty-state__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          <div class="empty-state__title">Mensagem enviada!</div>
+          <div class="empty-state__text" id="sucessoTexto">Obrigado pelo contato. Vamos responder em breve.</div>
+          <button type="button" class="btn btn-ghost" id="btnNovaMensagem">Enviar outra mensagem</button>
+        </div>
+      </section>
+
+      <!-- INFORMAÇÕES (troque pelos dados reais da equipe) -->
+      <aside class="contact-side">
+        <div class="card contact-info">
+          <div class="contact-info__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <div class="contact-info__label">E-mail</div>
+            <div class="contact-info__value"><a href="mailto:contato@plain.com.br">contato@plain.com.br</a></div>
+          </div>
+        </div>
+        <div class="card contact-info">
+          <div class="contact-info__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="contact-info__label">Localização</div>
+            <div class="contact-info__value">Araucária – PR</div>
+            <div class="contact-info__sub">Col. Est. Prof. Júlio Szymanski</div>
+          </div>
+        </div>
+        <div class="card contact-info">
+          <div class="contact-info__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div>
+            <div class="contact-info__label">Atendimento</div>
+            <div class="contact-info__value">Segunda a sexta</div>
+            <div class="contact-info__sub">Resposta em até 2 dias úteis</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- PERGUNTAS FREQUENTES -->
+    <section class="card faq">
+      <h2 class="inst-section__title">Perguntas frequentes</h2>
+      <details>
+        <summary>Qual a diferença entre conta Empresa e conta Pessoal?</summary>
+        <div class="faq__answer">
+          A conta <b>Empresa</b> é para indústrias e negócios (pede razão social e CNPJ).
+          A conta <b>Pessoal</b> é para profissionais e prestadores de serviço autônomos.
+          As duas podem montar rede e cadastrar projetos.
+        </div>
+      </details>
+      <details>
+        <summary>Como me conecto a uma empresa ou profissional?</summary>
+        <div class="faq__answer">
+          Entre na página <a href="rede.html">Rede</a>, use a busca ou os filtros para encontrar a conta
+          e clique em <b>+ Conectar</b>. Para desfazer, clique de novo no botão.
+        </div>
+      </details>
+      <details>
+        <summary>Quem consegue ver os meus projetos?</summary>
+        <div class="faq__answer">
+          Só você. Cada projeto fica ligado à sua conta e apenas o dono pode editá-lo ou excluí-lo.
+        </div>
+      </details>
+      <details>
+        <summary>Esqueci minha senha. E agora?</summary>
+        <div class="faq__answer">
+          A recuperação automática de senha ainda não está disponível. Envie uma mensagem
+          por este formulário escolhendo o assunto <b>Problema na conta</b>, usando o e-mail cadastrado.
+        </div>
+      </details>
+      <details>
+        <summary>A área de Mensagens já funciona?</summary>
+        <div class="faq__answer">
+          Ainda não — ela está em desenvolvimento. Por enquanto, use as conexões da Rede
+          e o contato da própria empresa ou profissional.
+        </div>
+      </details>
+    </section>
+
+  </main>
+</div>
+
+<script src="comum.js"></script>
+<script src="contato.js"></script>
+</body>
+</html>

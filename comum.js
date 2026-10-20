@@ -4,9 +4,20 @@
 var API = "http://localhost:3000";
 var USUARIO_ID = localStorage.getItem("usuario_id");
 
-// Sem login -> volta para a tela de login
-if (!USUARIO_ID) {
+// Páginas marcadas com <body data-publica> (Quem somos, Contato)
+// podem ser vistas sem login.
+var PAGINA_PUBLICA = !!(document.body && document.body.hasAttribute("data-publica"));
+
+// Sem login -> volta para a tela de login (exceto nas páginas públicas)
+if (!USUARIO_ID && !PAGINA_PUBLICA) {
   window.location.href = "index.html";
+}
+
+// Visitante sem login numa página pública: esconde o que é só para logados
+if (!USUARIO_ID && PAGINA_PUBLICA) {
+  document.body.classList.add("deslogado");
+  var marca = document.querySelector(".topbar__brand");
+  if (marca) marca.setAttribute("href", "index.html");
 }
 
 function escapeHtml(v) {

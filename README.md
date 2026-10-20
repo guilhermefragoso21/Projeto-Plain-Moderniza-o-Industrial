@@ -9,10 +9,16 @@ Projeto desenvolvido como Trabalho de Conclusão de Curso do Técnico em Desenvo
 ## Funcionalidades
 
 - **Cadastro e login** de contas do tipo **Empresa** ou **Pessoal**, com senha criptografada (bcrypt)
-- **Início (feed):** perfil do usuário, estatísticas e indicadores
+- **Início (feed):** perfil do usuário, estatísticas e indicadores reais (disponibilidade, alertas, manutenções concluídas)
+- **Equipamentos** (menu lateral do Início): cadastrar, editar, excluir e mudar o status das máquinas (Operando, Em manutenção, Parado, Em retrofit), com busca e filtros
+- **Manutenções** (menu lateral do Início): agendar e registrar manutenções preventivas, corretivas e preditivas por equipamento, com data, responsável, custo e destaque para as atrasadas
+- **Relatórios** (menu lateral do Início): indicadores por período, gráficos de manutenções por tipo, situação dos equipamentos, custo por mês, ranking de equipamentos, resumo de projetos, exportação em CSV (Excel) e impressão
+- **Monitoramento** (menu lateral do Início): painel da planta com disponibilidade, alertas automáticos (atrasos, máquinas paradas, manutenções próximas), troca rápida de status e atualização automática a cada 30 segundos
 - **Rede:** lista de empresas e profissionais cadastrados, com busca, filtros e botão Conectar/Desconectar
 - **Projetos:** criar, editar, excluir e alterar o status de projetos (Planejamento, Em andamento, Concluído, Pausado), com prazo e destaque para projetos atrasados
 - **Mensagens:** área reservada para comunicação entre usuários (em desenvolvimento)
+- **Quem somos:** apresentação da plataforma, como funciona, público, valores e informações do TCC (abre com ou sem login)
+- **Contato:** formulário que salva as mensagens no banco (tabela `contatos`), com perguntas frequentes (abre com ou sem login)
 
 ## Tecnologias
 
@@ -55,13 +61,17 @@ plain/
 ├── rede.html             # Página Rede
 ├── projetos.html         # Página Projetos
 ├── mensagens.html        # Página Mensagens
+├── quem-somos.html       # Página Quem somos (pública)
+├── contato.html          # Página Contato (pública)
 ├── style.css             # Estilos do login e cadastro
 ├── dashboard.css         # Estilos do painel e páginas internas
 ├── main.js               # Login e cadastro
 ├── dashboard.js          # Painel principal
+├── painel.js             # Menu do Início: Equipamentos, Manutenções, Relatórios, Monitoramento
 ├── comum.js              # Funções compartilhadas (Rede, Projetos, Mensagens)
 ├── rede.js               # Lógica da página Rede
 ├── projetos.js           # Lógica da página Projetos
+├── contato.js            # Lógica do formulário de Contato
 ├── server.js             # Servidor (API + arquivos do site)
 ├── banco_plain.sql       # Script completo do banco de dados
 └── atualizacao_banco.sql # Cria só as tabelas novas em um banco já existente
@@ -90,8 +100,8 @@ mysql -u root -p < "C:\caminho\para\a\pasta\plain\banco_plain.sql"
 
 Troque `8.0` pela sua versão do MySQL e `C:\caminho\para\a\pasta\plain` pelo local onde está o projeto. Digite a senha do MySQL quando for pedida.
 
-> **Já tem o banco criado e não quer perder os dados?** Rode o `atualizacao_banco.sql` em vez do `banco_plain.sql`. Ele só cria as tabelas `projetos` e `conexoes`, sem apagar nada.
-> O servidor também cria essas duas tabelas automaticamente ao iniciar, caso não existam.
+> **Já tem o banco criado e não quer perder os dados?** Rode o `atualizacao_banco.sql` em vez do `banco_plain.sql`. Ele só cria as tabelas `projetos`, `conexoes`, `contatos`, `equipamentos` e `manutencoes`, sem apagar nada.
+> O servidor também cria as tabelas `contatos`, `equipamentos` e `manutencoes` automaticamente ao iniciar, caso não existam.
 
 ### 2. Configurar a conexão com o banco
 
@@ -130,7 +140,7 @@ node server.js
 Se tudo estiver certo, o terminal mostra:
 
 ```
-Tabelas projetos e conexoes OK.
+Tabelas contatos, equipamentos e manutencoes OK.
 Servidor PLAIN rodando em http://localhost:3000
 ```
 
@@ -168,6 +178,17 @@ Abra o navegador e acesse:
 | GET | `/api/rede/:usuarioId` | Lista as contas da rede e quem já está conectado |
 | POST | `/api/conexoes` | Conecta dois usuários |
 | DELETE | `/api/conexoes/:usuarioId/:conectadoId` | Desfaz uma conexão |
+| POST | `/api/contato` | Envia uma mensagem pelo formulário de Contato |
+| GET | `/api/equipamentos/:usuarioId` | Lista os equipamentos do usuário |
+| POST | `/api/equipamentos` | Cadastra um equipamento |
+| PUT | `/api/equipamentos/:id` | Edita um equipamento (inclusive o status) |
+| DELETE | `/api/equipamentos/:id?usuario_id=` | Exclui um equipamento e as manutenções dele |
+| GET | `/api/manutencoes/:usuarioId` | Lista as manutenções do usuário |
+| POST | `/api/manutencoes` | Registra uma manutenção |
+| PUT | `/api/manutencoes/:id` | Edita uma manutenção |
+| DELETE | `/api/manutencoes/:id?usuario_id=` | Exclui uma manutenção |
+
+> As mensagens de contato podem ser lidas no MySQL Workbench com `SELECT * FROM contatos ORDER BY criado_em DESC;`
 
 ---
 
@@ -179,6 +200,8 @@ Abra o navegador e acesse:
 | `Erro 404` ao salvar projeto | Está rodando uma versão antiga do `server.js` | Pare o servidor (Ctrl + C), substitua o `server.js` e rode de novo |
 | `Access denied for user 'root'@'localhost'` | Senha do MySQL errada no `server.js` | Corrija o campo `password` no `server.js` |
 | `Unknown database 'plain_db'` | O banco não foi criado | Execute o `banco_plain.sql` (passo 1) |
+| Menu Equipamentos/Manutenções mostra `Erro 404` | Está rodando uma versão antiga do `server.js` | Pare o servidor (Ctrl + C), substitua o `server.js` e rode de novo |
+| `Table 'plain_db.contatos' doesn't exist` ao enviar contato | Banco antigo e servidor sem permissão para criar tabelas | Rode o `atualizacao_banco.sql` |
 | `Table 'plain_db.projetos' doesn't exist` | Banco antigo, sem as tabelas novas | Rode o `atualizacao_banco.sql` ou reinicie o servidor |
 | `EADDRINUSE: address already in use :::3000` | Já existe outro servidor rodando na porta 3000 | Feche o outro terminal com o `node` ou reinicie o computador |
 | `Cannot find module 'express'` | Dependências não instaladas | Rode o passo 3 dentro da pasta do projeto |

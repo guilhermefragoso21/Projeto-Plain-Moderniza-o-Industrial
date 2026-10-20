@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="dashboard.css" />
 </head>
-<body>
+<body data-pagina="inicio">
 
 <!-- TOPBAR -->
 <header class="topbar">
@@ -63,25 +63,34 @@
       <div class="profile-card__stat"><span>Empresas</span><span id="statEmpresas">—</span></div>
       <div class="profile-card__stat"><span>Pessoas</span><span id="statPessoas">—</span></div>
       <div class="profile-card__links">
-        <a class="profile-card__link active">
+        <a class="profile-card__link active" href="#feed" data-secao="feed">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
           Feed
         </a>
-        <a class="profile-card__link">
+        <a class="profile-card__link" href="#equipamentos" data-secao="equipamentos">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
           Equipamentos
         </a>
-        <a class="profile-card__link">
+        <a class="profile-card__link" href="#manutencoes" data-secao="manutencoes">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
           Manutenções
         </a>
-        <a class="profile-card__link">
+        <a class="profile-card__link" href="#relatorios" data-secao="relatorios">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
           Relatórios
         </a>
-        <a class="profile-card__link">
+        <a class="profile-card__link" href="#monitoramento" data-secao="monitoramento">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
           Monitoramento
+        </a>
+        <div class="profile-card__divider" style="margin:8px 0"></div>
+        <a class="profile-card__link" href="quem-somos.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          Quem somos
+        </a>
+        <a class="profile-card__link" href="contato.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contato
         </a>
       </div>
     </div>
@@ -262,6 +271,9 @@
 
   </main>
 
+  <!-- CENTER: SEÇÕES DO MENU (Equipamentos, Manutenções, Relatórios, Monitoramento) -->
+  <main class="page-main painel" id="painel" hidden></main>
+
   <!-- RIGHT SIDEBAR -->
   <aside class="right-col">
 
@@ -270,7 +282,7 @@
       <div class="widget-card__title">Seus Indicadores</div>
       <div class="metrics-grid">
         <div class="metric-box">
-          <div class="metric-box__value up">↑ 94%</div>
+          <div class="metric-box__value up" id="metricDisponibilidade">—</div>
           <div class="metric-box__label">Disponibilidade</div>
         </div>
         <div class="metric-box">
@@ -278,12 +290,12 @@
           <div class="metric-box__label">Projetos Ativos</div>
         </div>
         <div class="metric-box">
-          <div class="metric-box__value warn">3</div>
-          <div class="metric-box__label">Notificações</div>
+          <div class="metric-box__value warn" id="metricAlertas">—</div>
+          <div class="metric-box__label">Alertas</div>
         </div>
         <div class="metric-box">
-          <div class="metric-box__value up">7</div>
-          <div class="metric-box__label">Serviços Concluídos</div>
+          <div class="metric-box__value up" id="metricConcluidos">—</div>
+          <div class="metric-box__label">Manutenções Concluídas</div>
         </div>
       </div>
     </div>
@@ -354,5 +366,6 @@
 </div>
 
 <script src="dashboard.js"></script>
+<script src="painel.js"></script>
 </body>
 </html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PLAIN – Quem somos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<!-- data-publica: pode ser aberta sem login -->
+<body data-pagina="quem-somos" data-publica>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a href="dashboard.html" class="topbar__brand" title="Voltar ao feed">PLAIN <span>·</span></a>
+
+  <div class="topbar__search" data-so-logado>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" placeholder="Buscar empresas, pessoas, projetos…" />
+  </div>
+
+  <nav class="topbar__nav">
+    <a href="dashboard.html" class="topnav-btn" data-so-logado>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Início
+    </a>
+    <a href="rede.html" class="topnav-btn" data-so-logado>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Rede
+    </a>
+    <a href="projetos.html" class="topnav-btn" data-so-logado>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      Projetos
+    </a>
+    <a href="mensagens.html" class="topnav-btn" data-so-logado>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Mensagens
+    </a>
+    <a href="quem-somos.html" class="topnav-btn active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      Quem somos
+    </a>
+    <a href="contato.html" class="topnav-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Contato
+    </a>
+    <div class="topbar__divider"></div>
+    <div class="avatar-btn" title="Meu Perfil" id="topAvatar" data-so-logado>·</div>
+    <a href="index.html" class="btn btn-primary btn-sm" data-so-deslogado>Entrar</a>
+  </nav>
+</header>
+
+<div class="layout layout--inst">
+  <main class="page-main">
+
+    <!-- ABERTURA -->
+    <section class="card inst-hero">
+      <span class="inst-hero__eyebrow">Quem somos</span>
+      <h1 class="inst-hero__title">Conectamos a indústria a quem sabe modernizá-la</h1>
+      <p class="inst-hero__text">
+        A PLAIN é uma plataforma que aproxima empresas que precisam modernizar suas máquinas
+        dos profissionais e prestadores de serviço especializados em retrofit industrial —
+        e ajuda os dois lados a organizar o trabalho em um só lugar.
+      </p>
+      <div class="inst-hero__actions">
+        <a href="rede.html" class="btn btn-light" data-so-logado>Explorar a rede</a>
+        <a href="criar-conta.html" class="btn btn-light" data-so-deslogado>Criar conta grátis</a>
+        <a href="contato.html" class="btn btn-outline-light">Fale com a gente</a>
+      </div>
+    </section>
+
+    <!-- NÚMEROS (vêm do banco) -->
+    <section class="card inst-stats" aria-label="A PLAIN em números">
+      <div class="inst-stat">
+        <div class="inst-stat__value" id="numContas">—</div>
+        <div class="inst-stat__label">Contas cadastradas</div>
+      </div>
+      <div class="inst-stat">
+        <div class="inst-stat__value" id="numEmpresas">—</div>
+        <div class="inst-stat__label">Empresas</div>
+      </div>
+      <div class="inst-stat">
+        <div class="inst-stat__value" id="numPessoas">—</div>
+        <div class="inst-stat__label">Profissionais</div>
+      </div>
+    </section>
+
+    <!-- O QUE É -->
+    <section class="card inst-section">
+      <h2 class="inst-section__title">O que é a PLAIN</h2>
+      <p class="inst-text">
+        Muitas fábricas têm equipamentos mecanicamente bons, mas com comandos, painéis e
+        sistemas de controle ultrapassados. Trocar a máquina inteira costuma ser caro e demorado.
+        O <strong>retrofit industrial</strong> é a alternativa: modernizar o que já existe —
+        trocando CLPs, IHMs, acionamentos e sensores — para ganhar eficiência, segurança e vida útil.
+      </p>
+      <p class="inst-text">
+        O difícil, muitas vezes, é encontrar quem faça esse serviço. A PLAIN nasceu para resolver
+        isso: um espaço onde <strong>empresas</strong> e <strong>profissionais</strong> se encontram,
+        se conectam e acompanham seus projetos de modernização e manutenção.
+      </p>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="card inst-section">
+      <h2 class="inst-section__title">Como funciona</h2>
+      <p class="inst-section__lead">Do cadastro ao projeto em andamento, em quatro passos.</p>
+      <div class="inst-grid inst-grid--4 inst-steps">
+        <div class="inst-feature inst-step">
+          <div class="inst-feature__title">Crie sua conta</div>
+          <div class="inst-feature__text">Escolha o tipo <b>Empresa</b> ou <b>Pessoal</b> e preencha seus dados. Sua senha é guardada com criptografia.</div>
+        </div>
+        <div class="inst-feature inst-step">
+          <div class="inst-feature__title">Monte sua rede</div>
+          <div class="inst-feature__text">Na página Rede, encontre empresas e profissionais por nome, setor ou cidade e clique em Conectar.</div>
+        </div>
+        <div class="inst-feature inst-step">
+          <div class="inst-feature__title">Organize projetos</div>
+          <div class="inst-feature__text">Cadastre seus projetos de retrofit com status, prazo e escopo — e veja na hora quais estão atrasados.</div>
+        </div>
+        <div class="inst-feature inst-step">
+          <div class="inst-feature__title">Converse</div>
+          <div class="inst-feature__text">A área de Mensagens, para falar direto com suas conexões, está em desenvolvimento.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARA QUEM -->
+    <section class="card inst-section">
+      <h2 class="inst-section__title">Para quem é</h2>
+      <div class="inst-grid inst-grid--2">
+        <div class="inst-feature">
+          <div class="inst-feature__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20"/><path d="M4 20V9l5 3V9l5 3V5h6v15"/></svg>
+          </div>
+          <div class="inst-feature__title">Empresas e indústrias</div>
+          <ul class="inst-list">
+            <li>Encontrar profissionais de automação, elétrica e manutenção</li>
+            <li>Acompanhar o andamento de cada modernização</li>
+            <li>Estender a vida útil das máquinas em vez de substituí-las</li>
+          </ul>
+        </div>
+        <div class="inst-feature">
+          <div class="inst-feature__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div class="inst-feature__title">Profissionais e prestadores</div>
+          <ul class="inst-list">
+            <li>Ser encontrado por empresas que precisam do seu serviço</li>
+            <li>Ampliar sua rede de contatos no setor industrial</li>
+            <li>Organizar seus trabalhos com prazos e status</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALORES -->
+    <section class="card inst-section">
+      <h2 class="inst-section__title">No que acreditamos</h2>
+      <div class="inst-grid inst-grid--4">
+        <div class="inst-feature">
+          <div class="inst-feature__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </div>
+          <div class="inst-feature__title">Simplicidade</div>
+          <div class="inst-feature__text">O nome diz tudo: <i>plain</i> é “simples” em inglês. Menos telas, menos burocracia.</div>
+        </div>
+        <div class="inst-feature">
+          <div class="inst-feature__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="inst-feature__title">Transparência</div>
+          <div class="inst-feature__text">Status e prazos à vista de todos os envolvidos no projeto.</div>
+        </div>
+        <div class="inst-feature">
+          <div class="inst-feature__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div class="inst-feature__title">Segurança</div>
+          <div class="inst-feature__text">Senhas criptografadas com bcrypt e cada projeto visível só para o seu dono.</div>
+        </div>
+        <div class="inst-feature">
+          <div class="inst-feature__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+          </div>
+          <div class="inst-feature__title">Sustentabilidade</div>
+          <div class="inst-feature__text">Modernizar é reaproveitar: menos descarte de máquinas e de matéria-prima.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE O PROJETO -->
+    <section class="card inst-section">
+      <h2 class="inst-section__title">Sobre o projeto</h2>
+      <div class="inst-about">
+        <div>
+          <p class="inst-text">
+            A PLAIN foi desenvolvida como <strong>Trabalho de Conclusão de Curso</strong> do
+            Técnico em Desenvolvimento de Sistemas do Colégio Estadual Professor Júlio Szymanski,
+            em Araucária – PR, em 2026.
+          </p>
+          <p class="inst-text">
+            A ideia surgiu da realidade da região, um polo industrial onde muitas empresas
+            convivem com equipamentos antigos e precisam de mão de obra especializada para mantê-los competitivos.
+          </p>
+          <div class="inst-tags">
+            <span class="tag tag-blue">HTML</span>
+            <span class="tag tag-blue">CSS</span>
+            <span class="tag tag-blue">JavaScript</span>
+            <span class="tag tag-green">Node.js + Express</span>
+            <span class="tag tag-orange">MySQL</span>
+          </div>
+        </div>
+        <div class="inst-people">
+          <div class="inst-person">
+            <div class="inst-person__avatar av-blue">G</div>
+            <div>
+              <div class="inst-person__name">Guilherme Fragoso Pereira de Sousa</div>
+              <div class="inst-person__role">Desenvolvedor</div>
+            </div>
+          </div>
+          <div class="inst-person">
+            <div class="inst-person__avatar av-indigo">A</div>
+            <div>
+              <div class="inst-person__name">Prof. Antonio Carlos</div>
+              <div class="inst-person__role">Orientador</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAMADA FINAL -->
+    <section class="card inst-cta">
+      <div>
+        <div class="inst-cta__title">Ficou com alguma dúvida?</div>
+        <div class="inst-cta__text">Mande uma mensagem — respondemos pelo e-mail que você informar.</div>
+      </div>
+      <a href="contato.html" class="btn btn-primary">Ir para Contato</a>
+    </section>
+
+  </main>
+</div>
+
+<script src="comum.js"></script>
+<script>
+  // Números reais vindos do banco (mesma rota usada no Início)
+  api("GET", "/api/estatisticas")
+    .then(function (s) {
+      setText("numContas", s.total_contas);
+      setText("numEmpresas", s.total_empresas);
+      setText("numPessoas", s.total_pessoas);
+    })
+    .catch(function () { /* mantém "—" se o servidor não responder */ });
+</script>
+</body>
+</html>

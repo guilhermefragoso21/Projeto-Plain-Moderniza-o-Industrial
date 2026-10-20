@@ -358,5 +358,372 @@ app.delete("/api/conexoes/:usuarioId/:conectadoId", async (req, res) => {
   }
 });
 
+// ============================================================
+//  CONTATO (formulário da página contato.html)
+// ============================================================
+const ASSUNTOS_CONTATO = ["duvida", "sugestao", "problema", "parceria", "outro"];
+
+app.post("/api/contato", async (req, res) => {
+  const nome     = String(req.body.nome || "").trim();
+  const email    = String(req.body.email || "").trim();
+  const assunto  = req.body.assunto || "duvida";
+  const mensagem = String(req.body.mensagem || "").trim();
+  const usuarioId = req.body.usuario_id || null; // opcional: visitante sem login também pode enviar
+
+  if (!nome) return res.status(400).json({ erro: "Informe seu nome." });
+  if (nome.length > 150) return res.status(400).json({ erro: "Nome muito longo (máx. 150 caracteres)." });
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 150) {
+    return res.status(400).json({ erro: "Informe um e-mail válido." });
+  }
+  if (!ASSUNTOS_CONTATO.includes(assunto)) return res.status(400).json({ erro: "Assunto inválido." });
+  if (mensagem.length < 10) return res.status(400).json({ erro: "A mensagem precisa ter pelo menos 10 caracteres." });
+  if (mensagem.length > 2000) return res.status(400).json({ erro: "Mensagem muito longa (máx. 2000 caracteres)." });
+
+  try {
+    const [r] = await pool.execute(
+      `INSERT INTO contatos (usuario_id, nome, email, assunto, mensagem)
+       VALUES (?, ?, ?, ?, ?)`,
+      [usuarioId, nome, email, assunto, mensagem]
+    );
+    res.status(201).json({ ok: true, id: r.insertId });
+  } catch (e) {
+    // usuario_id que não existe mais: salva a mensagem sem vínculo com a conta
+    if (e.code === "ER_NO_REFERENCED_ROW_2") {
+      try {
+        const [r] = await pool.execute(
+          `INSERT INTO contatos (usuario_id, nome, email, assunto, mensagem)
+           VALUES (NULL, ?, ?, ?, ?)`,
+          [nome, email, assunto, mensagem]
+        );
+        return res.status(201).json({ ok: true, id: r.insertId });
+      } catch (e2) { console.error(e2); }
+    } else {
+      console.error(e);
+    }
+    res.status(500).json({ erro: "Erro ao enviar a mensagem." });
+  }
+});
+
+// Obs.: as mensagens recebidas ficam na tabela "contatos".
+// Para ler, use no MySQL Workbench:  SELECT * FROM contatos ORDER BY criado_em DESC;
+// (não há rota pública de leitura, para não expor e-mails de quem escreveu)
+
+// ============================================================
+//  EQUIPAMENTOS (menu "Equipamentos" do Início)
+// ============================================================
+const STATUS_EQUIP = ["operando", "manutencao", "parado", "retrofit"];
+
+function texto(v, max) {
+  const t = (v === undefined || v === null) ? "" : String(v).trim();
+  return t ? t.slice(0, max) : null;
+}
+
+function lerEquipamento(body) {
+  const nome = (body.nome || "").trim();
+  const status = body.status || "operando";
+  const anoTxt = body.ano_fabricacao;
+  const ano = (anoTxt === "" || anoTxt === null || anoTxt === undefined) ? null : Number(anoTxt);
+
+  if (!nome) return { erro: "Informe o nome do equipamento." };
+  if (nome.length > 150) return { erro: "Nome muito longo (máx. 150 caracteres)." };
+  if (!STATUS_EQUIP.includes(status)) return { erro: "Status inválido." };
+  if (ano !== null && (!Number.isInteger(ano) || ano < 1900 || ano > new Date().getFullYear() + 1)) {
+    return { erro: "Ano de fabricação inválido." };
+  }
+  return {
+    nome, status, ano_fabricacao: ano,
+    tipo:        texto(body.tipo, 80),
+    fabricante:  texto(body.fabricante, 100),
+    modelo:      texto(body.modelo, 100),
+    localizacao: texto(body.localizacao, 150),
+    observacoes: texto(body.observacoes, 2000)
+  };
+}
+
+app.get("/api/equipamentos/:usuarioId", async (req, res) => {
+  try {
+    const [rows] = await pool.execute(
+      `SELECT id, nome, tipo, fabricante, modelo, localizacao, ano_fabricacao,
+              status, observacoes, criado_em, atualizado_em
+         FROM equipamentos
+        WHERE usuario_id = ?
+        ORDER BY nome`,
+      [req.params.usuarioId]
+    );
+    res.json(rows);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ erro: "Erro ao consultar equipamentos." });
+  }
+});
+
+app.post("/api/equipamentos", async (req, res) => {
+  const usuarioId = req.body.usuario_id;
+  if (!usuarioId) return res.status(400).json({ erro: "Usuário não informado." });
+  const e = lerEquipamento(req.body);
+  if (e.erro) return res.status(400).json({ erro: e.erro });
+  try {
+    const [r] = await pool.execute(
+      `INSERT INTO equipamentos
+         (usuario_id, nome, tipo, fabricante, modelo, localizacao, ano_fabricacao, status, observacoes)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [usuarioId, e.nome, e.tipo, e.fabricante, e.modelo, e.localizacao, e.ano_fabricacao, e.status, e.observacoes]
+    );
+    res.status(201).json({ ok: true, id: r.insertId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao salvar equipamento." });
+  }
+});
+
+app.put("/api/equipamentos/:id", async (req, res) => {
+  const usuarioId = req.body.usuario_id;
+  if (!usuarioId) return res.status(400).json({ erro: "Usuário não informado." });
+  const e = lerEquipamento(req.body);
+  if (e.erro) return res.status(400).json({ erro: e.erro });
+  try {
+    const [r] = await pool.execute(
+      `UPDATE equipamentos
+          SET nome = ?, tipo = ?, fabricante = ?, modelo = ?, localizacao = ?,
+              ano_fabricacao = ?, status = ?, observacoes = ?
+        WHERE id = ? AND usuario_id = ?`,
+      [e.nome, e.tipo, e.fabricante, e.modelo, e.localizacao, e.ano_fabricacao, e.status, e.observacoes,
+       req.params.id, usuarioId]
+    );
+    if (r.affectedRows === 0) return res.status(404).json({ erro: "Equipamento não encontrado." });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao atualizar equipamento." });
+  }
+});
+
+// Excluir um equipamento apaga também as manutenções dele (ON DELETE CASCADE)
+app.delete("/api/equipamentos/:id", async (req, res) => {
+  const usuarioId = req.query.usuario_id;
+  if (!usuarioId) return res.status(400).json({ erro: "Usuário não informado." });
+  try {
+    const [r] = await pool.execute(
+      "DELETE FROM equipamentos WHERE id = ? AND usuario_id = ?",
+      [req.params.id, usuarioId]
+    );
+    if (r.affectedRows === 0) return res.status(404).json({ erro: "Equipamento não encontrado." });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao excluir equipamento." });
+  }
+});
+
+// ============================================================
+//  MANUTENÇÕES (menu "Manutenções" do Início)
+// ============================================================
+const TIPOS_MANUT  = ["preventiva", "corretiva", "preditiva"];
+const STATUS_MANUT = ["agendada", "em_execucao", "concluida", "cancelada"];
+const DATA_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function lerManutencao(body) {
+  const titulo = (body.titulo || "").trim();
+  const tipo = body.tipo || "preventiva";
+  const status = body.status || "agendada";
+  const dataPrevista = body.data_prevista || null;
+  let dataConclusao = body.data_conclusao || null;
+  const custoTxt = body.custo;
+  const custo = (custoTxt === "" || custoTxt === null || custoTxt === undefined) ? null : Number(custoTxt);
+
+  if (!body.equipamento_id) return { erro: "Escolha o equipamento." };
+  if (!titulo) return { erro: "Informe o serviço a ser feito." };
+  if (titulo.length > 150) return { erro: "Título muito longo (máx. 150 caracteres)." };
+  if (!TIPOS_MANUT.includes(tipo)) return { erro: "Tipo de manutenção inválido." };
+  if (!STATUS_MANUT.includes(status)) return { erro: "Status inválido." };
+  if (!dataPrevista || !DATA_RE.test(dataPrevista)) return { erro: "Informe a data prevista." };
+  if (dataConclusao && !DATA_RE.test(dataConclusao)) return { erro: "Data de conclusão inválida." };
+  if (custo !== null && (!Number.isFinite(custo) || custo < 0 || custo > 99999999)) return { erro: "Custo inválido." };
+  if (status !== "concluida") dataConclusao = null; // só manutenção concluída tem data de conclusão
+
+  return {
+    equipamento_id: body.equipamento_id, titulo, tipo, status,
+    data_prevista: dataPrevista, data_conclusao: dataConclusao, custo,
+    responsavel: texto(body.responsavel, 150),
+    observacoes: texto(body.observacoes, 2000)
+  };
+}
+
+// Confere se o equipamento existe e pertence ao usuário
+async function equipamentoDoUsuario(equipamentoId, usuarioId) {
+  const [rows] = await pool.execute(
+    "SELECT id FROM equipamentos WHERE id = ? AND usuario_id = ?",
+    [equipamentoId, usuarioId]
+  );
+  return rows.length > 0;
+}
+
+app.get("/api/manutencoes/:usuarioId", async (req, res) => {
+  try {
+    const [rows] = await pool.execute(
+      `SELECT m.id, m.equipamento_id, e.nome AS equipamento_nome,
+              m.titulo, m.tipo, m.status,
+              DATE_FORMAT(m.data_prevista,  '%Y-%m-%d') AS data_prevista,
+              DATE_FORMAT(m.data_conclusao, '%Y-%m-%d') AS data_conclusao,
+              m.custo, m.responsavel, m.observacoes, m.criado_em
+         FROM manutencoes m
+         JOIN equipamentos e ON e.id = m.equipamento_id
+        WHERE m.usuario_id = ?
+        ORDER BY m.data_prevista DESC, m.id DESC`,
+      [req.params.usuarioId]
+    );
+    res.json(rows.map(r => ({ ...r, custo: r.custo === null ? null : Number(r.custo) })));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ erro: "Erro ao consultar manutenções." });
+  }
+});
+
+app.post("/api/manutencoes", async (req, res) => {
+  const usuarioId = req.body.usuario_id;
+  if (!usuarioId) return res.status(400).json({ erro: "Usuário não informado." });
+  const m = lerManutencao(req.body);
+  if (m.erro) return res.status(400).json({ erro: m.erro });
+  try {
+    if (!(await equipamentoDoUsuario(m.equipamento_id, usuarioId))) {
+      return res.status(404).json({ erro: "Equipamento não encontrado." });
+    }
+    const [r] = await pool.execute(
+      `INSERT INTO manutencoes
+         (usuario_id, equipamento_id, titulo, tipo, status, data_prevista, data_conclusao,
+          custo, responsavel, observacoes)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [usuarioId, m.equipamento_id, m.titulo, m.tipo, m.status, m.data_prevista, m.data_conclusao,
+       m.custo, m.responsavel, m.observacoes]
+    );
+    res.status(201).json({ ok: true, id: r.insertId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao salvar manutenção." });
+  }
+});
+
+app.put("/api/manutencoes/:id", async (req, res) => {
+  const usuarioId = req.body.usuario_id;
+  if (!usuarioId) return res.status(400).json({ erro: "Usuário não informado." });
+  const m = lerManutencao(req.body);
+  if (m.erro) return res.status(400).json({ erro: m.erro });
+  try {
+    if (!(await equipamentoDoUsuario(m.equipamento_id, usuarioId))) {
+      return res.status(404).json({ erro: "Equipamento não encontrado." });
+    }
+    const [r] = await pool.execute(
+      `UPDATE manutencoes
+          SET equipamento_id = ?, titulo = ?, tipo = ?, status = ?, data_prevista = ?,
+              data_conclusao = ?, custo = ?, responsavel = ?, observacoes = ?
+        WHERE id = ? AND usuario_id = ?`,
+      [m.equipamento_id, m.titulo, m.tipo, m.status, m.data_prevista, m.data_conclusao,
+       m.custo, m.responsavel, m.observacoes, req.params.id, usuarioId]
+    );
+    if (r.affectedRows === 0) return res.status(404).json({ erro: "Manutenção não encontrada." });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao atualizar manutenção." });
+  }
+});
+
+app.delete("/api/manutencoes/:id", async (req, res) => {
+  const usuarioId = req.query.usuario_id;
+  if (!usuarioId) return res.status(400).json({ erro: "Usuário não informado." });
+  try {
+    const [r] = await pool.execute(
+      "DELETE FROM manutencoes WHERE id = ? AND usuario_id = ?",
+      [req.params.id, usuarioId]
+    );
+    if (r.affectedRows === 0) return res.status(404).json({ erro: "Manutenção não encontrada." });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao excluir manutenção." });
+  }
+});
+
+// ============================================================
+//  Cria as tabelas novas ao iniciar, caso ainda não existam
+// ============================================================
+const TABELAS_NOVAS = {
+  contatos: `
+    CREATE TABLE IF NOT EXISTS contatos (
+      id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+      usuario_id  INT UNSIGNED NULL,
+      nome        VARCHAR(150) NOT NULL,
+      email       VARCHAR(150) NOT NULL,
+      assunto     ENUM('duvida','sugestao','problema','parceria','outro') NOT NULL DEFAULT 'duvida',
+      mensagem    TEXT NOT NULL,
+      lida        TINYINT(1) NOT NULL DEFAULT 0,
+      criado_em   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      KEY idx_contatos_usuario (usuario_id),
+      CONSTRAINT fk_contatos_usuario
+        FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
+        ON DELETE SET NULL ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+  equipamentos: `
+    CREATE TABLE IF NOT EXISTS equipamentos (
+      id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
+      usuario_id      INT UNSIGNED NOT NULL,
+      nome            VARCHAR(150) NOT NULL,
+      tipo            VARCHAR(80)  NULL,
+      fabricante      VARCHAR(100) NULL,
+      modelo          VARCHAR(100) NULL,
+      localizacao     VARCHAR(150) NULL,
+      ano_fabricacao  SMALLINT UNSIGNED NULL,
+      status          ENUM('operando','manutencao','parado','retrofit') NOT NULL DEFAULT 'operando',
+      observacoes     TEXT NULL,
+      criado_em       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      atualizado_em   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      KEY idx_equipamentos_usuario (usuario_id),
+      CONSTRAINT fk_equipamentos_usuario
+        FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+  manutencoes: `
+    CREATE TABLE IF NOT EXISTS manutencoes (
+      id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
+      usuario_id      INT UNSIGNED NOT NULL,
+      equipamento_id  INT UNSIGNED NOT NULL,
+      titulo          VARCHAR(150) NOT NULL,
+      tipo            ENUM('preventiva','corretiva','preditiva') NOT NULL DEFAULT 'preventiva',
+      status          ENUM('agendada','em_execucao','concluida','cancelada') NOT NULL DEFAULT 'agendada',
+      data_prevista   DATE NOT NULL,
+      data_conclusao  DATE NULL,
+      custo           DECIMAL(10,2) NULL,
+      responsavel     VARCHAR(150) NULL,
+      observacoes     TEXT NULL,
+      criado_em       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      atualizado_em   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      KEY idx_manutencoes_usuario (usuario_id),
+      KEY idx_manutencoes_equipamento (equipamento_id),
+      CONSTRAINT fk_manutencoes_usuario
+        FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+      CONSTRAINT fk_manutencoes_equipamento
+        FOREIGN KEY (equipamento_id) REFERENCES equipamentos (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
+};
+
+async function prepararBanco() {
+  // A ordem importa: manutencoes depende de equipamentos
+  for (const nome of ["contatos", "equipamentos", "manutencoes"]) {
+    try {
+      await pool.query(TABELAS_NOVAS[nome]);
+    } catch (e) {
+      console.error(`Aviso: não foi possível criar a tabela ${nome}:`, e.message);
+    }
+  }
+  console.log("Tabelas contatos, equipamentos e manutencoes OK.");
+}
+
 const PORT = 3000;
-app.listen(PORT, () => console.log(`Servidor PLAIN rodando em http://localhost:${PORT}`));
+prepararBanco().finally(() => {
+  app.listen(PORT, () => console.log(`Servidor PLAIN rodando em http://localhost:${PORT}`));
+});
